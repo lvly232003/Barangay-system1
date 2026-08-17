@@ -1,0 +1,188 @@
+<div class="p-6">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-emerald-50">Certificate Form Management</h1>
+    <p class="text-gray-600 dark:text-emerald-200/70 mt-2">Manage available certificate forms that residents can request</p>
+  </div>
+
+  <!-- Add Form Button -->
+  <div class="mb-6">
+    <button 
+      (click)="toggleAddForm()" 
+      class="btn-primary">
+      <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+      </svg>
+      {{ editingForm ? 'Cancel Edit' : 'Add Certificate Form' }}
+    </button>
+  </div>
+
+  <!-- Add Form -->
+  <div *ngIf="showAddForm" class="card mb-8">
+    <h2 class="text-xl font-semibold text-gray-900 dark:text-emerald-50 mb-6">
+      {{ editingForm ? 'Edit Certificate Form' : 'Add New Certificate Form' }}
+    </h2>
+    
+    <form [formGroup]="addForm" (ngSubmit)="editingForm ? updateForm() : onSubmit()" class="space-y-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-emerald-100/80 mb-2">Certificate Name</label>
+          <input
+            type="text"
+            formControlName="name"
+            class="input-field"
+            [class.border-red-500]="addForm.get('name')?.invalid && addForm.get('name')?.touched"
+            placeholder="e.g., Barangay Clearance"
+          />
+          <div *ngIf="addForm.get('name')?.invalid && addForm.get('name')?.touched" class="mt-1 text-sm text-red-600">
+            <span *ngIf="addForm.get('name')?.errors?.['required']">Certificate name is required</span>
+            <span *ngIf="addForm.get('name')?.errors?.['minlength']">Name must be at least 3 characters</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 dark:text-emerald-100/80 mb-2">Description</label>
+        <textarea
+          formControlName="description"
+          rows="3"
+          class="input-field resize-none"
+          [class.border-red-500]="addForm.get('description')?.invalid && addForm.get('description')?.touched"
+          placeholder="Describe what this certificate is for"
+        ></textarea>
+        <div *ngIf="addForm.get('description')?.invalid && addForm.get('description')?.touched" class="mt-1 text-sm text-red-600">
+          <span *ngIf="addForm.get('description')?.errors?.['required']">Description is required</span>
+          <span *ngIf="addForm.get('description')?.errors?.['minlength']">Description must be at least 10 characters</span>
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 dark:text-emerald-100/80 mb-2">Requirements</label>
+        <textarea
+          formControlName="requirements"
+          rows="3"
+          class="input-field resize-none"
+          [class.border-red-500]="addForm.get('requirements')?.invalid && addForm.get('requirements')?.touched"
+          placeholder="List requirements separated by commas (e.g., Valid ID, Proof of Residency, Recent Photo)"
+        ></textarea>
+        <div *ngIf="addForm.get('requirements')?.invalid && addForm.get('requirements')?.touched" class="mt-1 text-sm text-red-600">
+          Requirements are required
+        </div>
+        <p class="mt-1 text-sm text-gray-500 dark:text-emerald-300/60">Separate each requirement with a comma</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-emerald-100/80 mb-2">Fee (PHP)</label>
+          <input
+            type="number"
+            formControlName="fee"
+            class="input-field"
+            [class.border-red-500]="addForm.get('fee')?.invalid && addForm.get('fee')?.touched"
+            placeholder="0"
+            min="0"
+          />
+          <div *ngIf="addForm.get('fee')?.invalid && addForm.get('fee')?.touched" class="mt-1 text-sm text-red-600">
+            <span *ngIf="addForm.get('fee')?.errors?.['required']">Fee is required</span>
+            <span *ngIf="addForm.get('fee')?.errors?.['min']">Fee must be 0 or greater</span>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-emerald-100/80 mb-2">Status</label>
+          <select
+            formControlName="isActive"
+            class="input-field"
+            [class.border-red-500]="addForm.get('isActive')?.invalid && addForm.get('isActive')?.touched"
+          >
+            <option [value]="true">Active</option>
+            <option [value]="false">Inactive</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="flex justify-end space-x-4">
+        <button
+          type="button"
+          (click)="cancelEdit()"
+          class="btn-outline">
+          Cancel
+        </button>
+        <button
+          type="submit"
+          [disabled]="isAddingForm"
+          class="btn-primary disabled:opacity-50 disabled:cursor-not-allowed">
+          <span *ngIf="!isAddingForm">{{ editingForm ? 'Update Form' : 'Add Form' }}</span>
+          <span *ngIf="isAddingForm" class="flex items-center">
+            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            {{ editingForm ? 'Updating...' : 'Adding...' }}
+          </span>
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Certificate Forms Table -->
+  <div class="card">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-emerald-50">Available Certificate Forms</h2>
+      <div class="text-sm text-gray-500 dark:text-emerald-300/60">
+        Total Forms: {{ certificateForms.length }}
+      </div>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200 dark:divide-emerald-900">
+        <thead class="bg-gray-50 dark:bg-surface-dark">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-emerald-300/60 uppercase tracking-wider">Certificate Name</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-emerald-300/60 uppercase tracking-wider">Description</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-emerald-300/60 uppercase tracking-wider">Fee</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-emerald-300/60 uppercase tracking-wider">Status</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-emerald-300/60 uppercase tracking-wider">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white dark:bg-surface-dark-elevated divide-y divide-gray-200 dark:divide-emerald-900">
+          <tr *ngFor="let form of certificateForms">
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-emerald-50">
+              {{ form.name }}
+            </td>
+            <td class="px-6 py-4 text-sm text-gray-500 dark:text-emerald-300/60 max-w-xs">
+              <div class="truncate">{{ form.description }}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-emerald-300/60">{{ form.fee ? ('₱' + form.fee) : 'FREE' }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <span [class]="getStatusBadgeClass(form.isActive ?? false)" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full">
+                {{ getStatusText(form.isActive ?? false) }}
+              </span>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+              <button 
+                (click)="editForm(form)" 
+                class="text-primary-600 hover:text-primary-900 mr-3">
+                Edit
+              </button>
+              <button 
+                (click)="deleteForm(form)" 
+                class="text-red-600 hover:text-red-900">
+                Delete
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="certificateForms.length === 0" class="text-center py-12">
+      <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-emerald-400/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+      </svg>
+      <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-emerald-50">No certificate forms found</h3>
+      <p class="mt-1 text-sm text-gray-500 dark:text-emerald-300/60">Get started by adding a new certificate form.</p>
+    </div>
+  </div>
+</div>

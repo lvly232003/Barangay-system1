@@ -1,0 +1,270 @@
+<div class="min-h-screen page-shell py-8">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Header -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-gray-900 dark:text-emerald-50">Basketball Court Reservation</h1>
+      <p class="mt-2 text-gray-600 dark:text-emerald-200/70">
+        Reserve a court — processing is <strong>first come, first served</strong> by queue number (when you booked), not by play date.
+      </p>
+    </div>
+
+    <div *ngIf="lastQueueNumber" class="mb-6 rounded-xl border border-emerald-200 bg-emerald-50 dark:bg-emerald-950/40 dark:border-emerald-800 px-5 py-4 flex flex-wrap items-center justify-between gap-3">
+      <div>
+        <p class="text-xs font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-300">Your queue ticket</p>
+        <p class="text-3xl font-extrabold text-emerald-800 dark:text-emerald-100">{{ formatQueueNumber(lastQueueNumber) }}</p>
+        <p class="text-sm text-emerald-700/80 dark:text-emerald-200/70 mt-1">Keep this number. Earlier tickets are served first.</p>
+      </div>
+    </div>
+
+    <!-- Available Courts -->
+    <div class="mb-8">
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-emerald-50 mb-4">Available Courts</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div 
+          *ngFor="let court of courts" 
+          class="bg-white dark:bg-surface-dark-elevated rounded-lg shadow-md p-6 border border-gray-200 dark:border-emerald-900 hover:shadow-lg transition-shadow cursor-pointer"
+          (click)="selectCourt(court.courtNumber)"
+        >
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-emerald-50">{{ court.name }}</h3>
+            <span class="text-sm font-medium text-green-600">₱{{ court.hourlyRate }}/hour</span>
+          </div>
+          
+          <div class="space-y-2 text-sm text-gray-600 dark:text-emerald-200/70">
+            <div class="flex items-center">
+              <svg class="w-4 h-4 mr-2 text-gray-400 dark:text-emerald-400/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+              </svg>
+              {{ court.location }}
+            </div>
+            
+            <div class="flex items-center">
+              <svg class="w-4 h-4 mr-2 text-gray-400 dark:text-emerald-400/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+              </svg>
+              Capacity: {{ court.capacity }} people
+            </div>
+            
+            <div class="flex items-center">
+              <svg class="w-4 h-4 mr-2 text-gray-400 dark:text-emerald-400/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              {{ court.amenities.join(', ') }}
+            </div>
+          </div>
+          
+          <div class="mt-4">
+            <button 
+              class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
+              (click)="selectCourt(court.courtNumber)"
+            >
+              Reserve This Court
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reservation Form -->
+    <div *ngIf="showForm && selectedCourt" class="mb-8">
+      <div class="bg-white dark:bg-surface-dark-elevated rounded-lg shadow-md p-6">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-xl font-semibold text-gray-900 dark:text-emerald-50">Reserve {{ selectedCourt.name }}</h2>
+          <button 
+            class="text-gray-400 dark:text-emerald-400/50 hover:text-gray-600"
+            (click)="resetForm()"
+          >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+
+        <form [formGroup]="reservationForm" (ngSubmit)="onSubmit()" class="space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Date -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-emerald-100/80 mb-2">Reservation Date</label>
+              <input 
+                type="date" 
+                formControlName="reservationDate"
+                [min]="getMinDate()"
+                [max]="getMaxDate()"
+                (change)="onDateChange()"
+                class="w-full px-3 py-2 border border-gray-300 dark:border-emerald-800 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                [class.border-red-500]="reservationForm.get('reservationDate')?.invalid && reservationForm.get('reservationDate')?.touched"
+              >
+              <div *ngIf="reservationForm.get('reservationDate')?.invalid && reservationForm.get('reservationDate')?.touched" class="text-red-500 text-sm mt-1">
+                Please select a reservation date
+              </div>
+            </div>
+
+            <!-- Start Time -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-emerald-100/80 mb-2">Start Time</label>
+              <select 
+                formControlName="startTime"
+                (change)="onStartTimeChange()"
+                class="w-full px-3 py-2 border border-gray-300 dark:border-emerald-800 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                [class.border-red-500]="reservationForm.get('startTime')?.invalid && reservationForm.get('startTime')?.touched"
+              >
+                <option value="">Select start time</option>
+                <option *ngFor="let slot of availableTimeSlots" [value]="slot">{{ slot }}</option>
+              </select>
+              <div *ngIf="reservationForm.get('startTime')?.invalid && reservationForm.get('startTime')?.touched" class="text-red-500 text-sm mt-1">
+                Please select a start time
+              </div>
+            </div>
+
+            <!-- Duration -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-emerald-100/80 mb-2">Duration (hours)</label>
+              <select 
+                formControlName="duration"
+                (change)="onDurationChange()"
+                class="w-full px-3 py-2 border border-gray-300 dark:border-emerald-800 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                [class.border-red-500]="reservationForm.get('duration')?.invalid && reservationForm.get('duration')?.touched"
+              >
+                <option value="">Select duration</option>
+                <option value="1">1 hour</option>
+                <option value="2">2 hours</option>
+                <option value="3">3 hours</option>
+                <option value="4">4 hours</option>
+              </select>
+              <div *ngIf="reservationForm.get('duration')?.invalid && reservationForm.get('duration')?.touched" class="text-red-500 text-sm mt-1">
+                Please select duration (1-4 hours)
+              </div>
+            </div>
+
+            <!-- Purpose -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-emerald-100/80 mb-2">Purpose</label>
+              <input 
+                type="text" 
+                formControlName="purpose"
+                placeholder="e.g., Basketball practice, Community game"
+                class="w-full px-3 py-2 border border-gray-300 dark:border-emerald-800 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                [class.border-red-500]="reservationForm.get('purpose')?.invalid && reservationForm.get('purpose')?.touched"
+              >
+              <div *ngIf="reservationForm.get('purpose')?.invalid && reservationForm.get('purpose')?.touched" class="text-red-500 text-sm mt-1">
+                Please provide purpose (minimum 10 characters)
+              </div>
+            </div>
+          </div>
+
+          <!-- Notes -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-emerald-100/80 mb-2">Additional Notes (Optional)</label>
+            <textarea 
+              formControlName="notes"
+              rows="3"
+              placeholder="Any special requirements or additional information..."
+              class="w-full px-3 py-2 border border-gray-300 dark:border-emerald-800 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            ></textarea>
+          </div>
+
+          <!-- Cost Summary -->
+          <div *ngIf="reservationForm.get('duration')?.value && reservationForm.get('courtNumber')?.value" class="bg-gray-50 dark:bg-surface-dark p-4 rounded-md">
+            <h3 class="text-sm font-medium text-gray-700 dark:text-emerald-100/80 mb-2">Cost Summary</h3>
+            <div class="flex justify-between items-center">
+              <span class="text-sm text-gray-600 dark:text-emerald-200/70">
+                {{ reservationForm.get('duration')?.value }} hour(s) × ₱{{ selectedCourt.hourlyRate }}/hour
+              </span>
+              <span class="text-lg font-semibold text-gray-900 dark:text-emerald-50">
+                ₱{{ getTotalCost(reservationForm.get('duration')?.value, reservationForm.get('courtNumber')?.value) }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Form Actions -->
+          <div class="flex justify-end space-x-4">
+            <button 
+              type="button" 
+              (click)="cancelRequest()"
+              class="px-6 py-2 border border-gray-300 dark:border-emerald-800 rounded-md text-gray-700 dark:text-emerald-100/80 hover:bg-gray-50 transition-colors"
+            >
+              Cancel
+            </button>
+            <button 
+              type="submit" 
+              [disabled]="isSubmitting || reservationForm.invalid"
+              class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            >
+              <span *ngIf="isSubmitting">Submitting...</span>
+              <span *ngIf="!isSubmitting">Submit Reservation</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- My Reservations -->
+    <div *ngIf="userReservations.length > 0" class="mb-8">
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-emerald-50 mb-4">My Reservations</h2>
+      <div class="bg-white dark:bg-surface-dark-elevated rounded-lg shadow-md overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200 dark:divide-emerald-900">
+            <thead class="bg-gray-50 dark:bg-surface-dark">
+              <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-emerald-300/60 uppercase tracking-wider">Queue #</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-emerald-300/60 uppercase tracking-wider">Court</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-emerald-300/60 uppercase tracking-wider">Date & Time</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-emerald-300/60 uppercase tracking-wider">Duration</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-emerald-300/60 uppercase tracking-wider">Purpose</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-emerald-300/60 uppercase tracking-wider">Status</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-emerald-300/60 uppercase tracking-wider">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white dark:bg-surface-dark-elevated divide-y divide-gray-200 dark:divide-emerald-900">
+              <tr *ngFor="let reservation of userReservations">
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-base font-extrabold text-emerald-700 dark:text-emerald-300">{{ formatQueueNumber(reservation.queueNumber) }}</div>
+                  <div *ngIf="reservation.status === 'pending' || reservation.status === 'approved'" class="text-xs text-gray-500 dark:text-emerald-300/60">
+                    Position #{{ getQueuePosition(reservation.id) }} in line
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-emerald-50">
+                  Court {{ reservation.courtNumber }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-emerald-300/60">
+                  {{ formatDateTime(reservation.reservationDate, reservation.startTime) }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-emerald-300/60">
+                  {{ reservation.duration }} hour(s)
+                </td>
+                <td class="px-6 py-4 text-sm text-gray-500 dark:text-emerald-300/60">
+                  {{ reservation.purpose }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full" [class]="getStatusBadgeClass(reservation.status)">
+                    {{ getStatusText(reservation.status) }}
+                  </span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                  <button 
+                    *ngIf="canCancelReservation(reservation)"
+                    (click)="cancelReservation(reservation.id)"
+                    class="text-red-600 hover:text-red-900 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <span *ngIf="!canCancelReservation(reservation)" class="text-gray-400 dark:text-emerald-400/50">-</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- No Reservations Message -->
+    <div *ngIf="userReservations.length === 0 && !showForm" class="text-center py-12">
+      <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-emerald-400/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+      </svg>
+      <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-emerald-50">No reservations yet</h3>
+      <p class="mt-1 text-sm text-gray-500 dark:text-emerald-300/60">Get started by selecting a court above to make your first reservation.</p>
+    </div>
+  </div>
+</div>

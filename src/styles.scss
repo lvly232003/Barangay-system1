@@ -1,0 +1,241 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import './app/modules/shared/styles/certificate-sheet.scss';
+@import './app/modules/shared/styles/request-sheet.scss';
+
+@layer base {
+  :root {
+    --bms-bg: #f8fafc;
+    --bms-surface: #ffffff;
+    --bms-surface-muted: #ecfdf5;
+    --bms-border: #d1fae5;
+    --bms-text: #06281f;
+    --bms-text-muted: #475569;
+    --bms-accent: #059669;
+    --bms-accent-strong: #047857;
+  }
+
+  html.dark {
+    --bms-bg: #07130f;
+    --bms-surface: #0f1f19;
+    --bms-surface-muted: #132820;
+    --bms-border: #1f3d32;
+    --bms-text: #ecfdf5;
+    --bms-text-muted: #a7f3d0;
+    --bms-accent: #34d399;
+    --bms-accent-strong: #10b981;
+  }
+
+  html {
+    font-family: 'Source Sans 3', 'Segoe UI', system-ui, sans-serif;
+    background-color: var(--bms-bg);
+    color: var(--bms-text);
+    color-scheme: light;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply min-h-screen antialiased transition-colors duration-300;
+    background-color: var(--bms-bg);
+    color: var(--bms-text);
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 shadow-md hover:shadow-emerald;
+    @apply dark:bg-emerald-500 dark:hover:bg-emerald-400 dark:text-white;
+  }
+
+  .btn-secondary {
+    @apply bg-teal-700 hover:bg-teal-800 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg;
+    @apply dark:bg-teal-500 dark:hover:bg-teal-400 dark:text-white;
+  }
+
+  .btn-outline {
+    @apply border-2 border-emerald-600 text-emerald-700 hover:bg-emerald-600 hover:text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 bg-transparent;
+    @apply dark:border-emerald-300 dark:text-emerald-100 dark:hover:bg-emerald-400 dark:hover:text-emerald-950;
+  }
+
+  .btn-outline-orange,
+  .btn-outline-accent {
+    @apply border-2 border-emerald-700 text-emerald-800 hover:bg-emerald-700 hover:text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 bg-transparent;
+    @apply dark:border-emerald-300 dark:text-emerald-100 dark:hover:bg-emerald-500 dark:hover:text-white;
+  }
+
+  /* High-contrast CTAs for emerald hero / dark green bands */
+  .btn-hero-solid {
+    @apply inline-flex items-center justify-center gap-2 text-lg px-8 py-3 rounded-lg font-semibold transition-colors duration-200 shadow-lg;
+    @apply bg-white text-emerald-800 hover:bg-emerald-50;
+    @apply dark:bg-emerald-100 dark:text-emerald-950 dark:hover:bg-white;
+  }
+
+  .btn-hero-outline {
+    @apply inline-flex items-center justify-center gap-2 text-lg px-8 py-3 rounded-lg font-semibold transition-colors duration-200;
+    @apply border-2 border-white text-white bg-transparent hover:bg-white hover:text-emerald-800;
+    @apply dark:border-emerald-100 dark:text-white dark:hover:bg-emerald-100 dark:hover:text-emerald-950;
+  }
+
+  .btn-hero-accent {
+    @apply inline-flex items-center justify-center gap-2 text-lg px-8 py-3 rounded-lg font-semibold transition-colors duration-200 shadow-lg;
+    @apply bg-teal-500 text-white hover:bg-teal-400;
+    @apply dark:bg-teal-400 dark:text-teal-950 dark:hover:bg-teal-300;
+  }
+
+  /*
+   * Auth / form cards stay light in both themes so labels stay dark and readable
+   * on emerald page backgrounds. Force color-scheme: light so native checkboxes
+   * /date pickers do not paint a black OS dark-mode chrome on a white card.
+   */
+  .form-card {
+    @apply bg-white text-slate-800 rounded-xl shadow-lg p-6 sm:p-8 border border-emerald-100;
+    color-scheme: light;
+  }
+
+  .form-label {
+    @apply block text-sm font-semibold text-slate-800 mb-2;
+  }
+
+  .form-muted {
+    @apply text-sm text-slate-600;
+  }
+
+  .form-link {
+    @apply font-semibold text-emerald-700 hover:text-emerald-800 underline-offset-2 hover:underline;
+  }
+
+  .form-check-label {
+    @apply ml-2 block text-sm text-slate-800;
+  }
+
+  /* Light-card checkboxes — never inherit html.dark native chrome */
+  .form-checkbox {
+    @apply h-4 w-4 shrink-0 rounded border border-emerald-300 bg-white text-emerald-600
+      accent-emerald-600 focus:ring-2 focus:ring-emerald-500 focus:ring-offset-0;
+    color-scheme: light;
+  }
+
+  .page-subtitle {
+    @apply text-emerald-50/90;
+  }
+
+  .input-field {
+    @apply w-full px-3 py-2 rounded-lg border border-emerald-200 bg-white text-slate-900
+      focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-colors duration-200;
+    @apply placeholder:text-slate-400;
+    @apply dark:bg-emerald-950/50 dark:border-emerald-800 dark:text-emerald-50 dark:placeholder:text-emerald-200/45
+      dark:focus:ring-emerald-400;
+    color-scheme: light;
+  }
+
+  html.dark .input-field {
+    color-scheme: dark;
+  }
+
+  /* Locked fields (e.g. email) — high contrast in light and dark */
+  .input-field-readonly {
+    @apply bg-slate-100 text-slate-800 border-slate-200 cursor-not-allowed;
+    @apply dark:bg-emerald-950 dark:text-emerald-100 dark:border-emerald-800;
+    opacity: 1 !important;
+    -webkit-text-fill-color: #1e293b; /* slate-800 — beat Safari readonly fade */
+  }
+
+  html.dark .input-field-readonly {
+    -webkit-text-fill-color: #d1fae5; /* emerald-100 */
+  }
+
+  .input-field-readonly:focus {
+    @apply ring-0 border-slate-200 dark:border-emerald-800;
+  }
+
+  .card {
+    @apply rounded-lg shadow-md p-6 border transition-shadow duration-200 hover:shadow-lg;
+    @apply bg-white border-emerald-100 text-slate-800;
+    @apply dark:bg-surface-dark-elevated dark:border-emerald-900 dark:shadow-none dark:text-emerald-50;
+  }
+
+  .navbar {
+    @apply shadow-sm border-b transition-colors duration-200;
+    @apply bg-white border-emerald-100;
+    @apply dark:bg-surface-dark dark:border-emerald-900;
+  }
+
+  .panel {
+    @apply bg-white border border-emerald-100 rounded-xl shadow-sm;
+    @apply dark:bg-surface-dark-elevated dark:border-emerald-900;
+  }
+
+  .page-shell {
+    @apply bg-emerald-50/70 text-slate-800;
+    @apply dark:bg-surface-dark dark:text-emerald-50;
+  }
+
+  .gradient-bg {
+    @apply bg-gradient-to-br from-emerald-50 via-white to-emerald-100;
+    @apply dark:from-emerald-950 dark:via-surface-dark dark:to-emerald-900/40;
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-emerald-700 via-emerald-600 to-teal-600 bg-clip-text text-transparent;
+    @apply dark:from-emerald-300 dark:via-emerald-400 dark:to-teal-300;
+  }
+
+  .hero-emerald {
+    @apply bg-gradient-to-br from-emerald-700 via-emerald-600 to-teal-700 text-white;
+    @apply dark:from-emerald-950 dark:via-emerald-900 dark:to-teal-950;
+  }
+
+  .sidebar-shell {
+    @apply h-full bg-white border-r border-emerald-100;
+    @apply dark:bg-surface-dark dark:border-emerald-900;
+  }
+
+  .nav-link {
+    @apply text-slate-700 hover:text-emerald-700 transition-colors duration-200;
+    @apply dark:text-emerald-100/80 dark:hover:text-emerald-300;
+  }
+
+  .nav-link-active {
+    @apply text-emerald-700 font-semibold;
+    @apply dark:text-emerald-300;
+  }
+
+  .muted-text {
+    @apply text-slate-600 dark:text-emerald-200/70;
+  }
+
+  /* Shared hamburger control — high contrast light/dark */
+  .hamburger-btn {
+    @apply inline-flex items-center justify-center h-10 w-10 rounded-lg border-2 border-emerald-600
+      text-emerald-700 bg-transparent shrink-0 transition-colors duration-200
+      hover:bg-emerald-600 hover:text-white
+      focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2
+      dark:border-emerald-300 dark:text-emerald-100 dark:hover:bg-emerald-400 dark:hover:text-emerald-950
+      dark:focus-visible:ring-offset-[#07130f];
+  }
+
+  .portal-drawer-overlay {
+    @apply fixed inset-0 z-40 bg-slate-900/50 lg:hidden;
+  }
+
+  .portal-sidebar {
+    @apply fixed top-16 bottom-0 left-0 z-50 w-72 max-w-[85vw] overflow-y-auto
+      transform transition-transform duration-200 ease-out shadow-xl
+      bg-white dark:bg-surface-dark
+      lg:static lg:top-auto lg:bottom-auto lg:z-auto lg:max-w-none lg:shadow-none lg:shrink-0
+      lg:transition-[width,transform] lg:duration-200;
+  }
+
+  .portal-sidebar-open {
+    @apply translate-x-0 lg:w-64 lg:overflow-visible;
+  }
+
+  .portal-sidebar-closed {
+    @apply -translate-x-full lg:translate-x-0 lg:w-0 lg:overflow-hidden lg:border-0 lg:pointer-events-none;
+  }
+}

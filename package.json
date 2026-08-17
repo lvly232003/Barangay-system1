@@ -1,0 +1,57 @@
+{
+  "name": "barangay-management-system",
+  "version": "1.0.0",
+  "description": "Barangay Management System with Angular, TypeScript, and Tailwind CSS",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "ng": "ng",
+    "start": "node scripts/dev-start.cjs",
+    "start:app": "ng serve",
+    "register-api": "node scripts/register-api.cjs",
+    "build": "ng build --configuration production",
+    "postinstall": "node -e \"try{require('fs').accessSync('node_modules/@angular/cli/bin/ng.js')}catch(e){process.exit(0)}\"",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test",
+    "serve": "ng serve --open"
+  },
+  "dependencies": {
+    "@angular/animations": "^17.0.0",
+    "@angular/common": "^17.0.0",
+    "@angular/compiler": "^17.0.0",
+    "@angular/core": "^17.0.0",
+    "@angular/forms": "^17.0.0",
+    "@angular/platform-browser": "^17.0.0",
+    "@angular/platform-browser-dynamic": "^17.0.0",
+    "@angular/router": "^17.0.0",
+    "@emailjs/browser": "^4.4.1",
+    "@supabase/supabase-js": "^2.110.7",
+    "apexcharts": "^3.54.1",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^3.0.3",
+    "qrcode": "^1.5.4",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0",
+    "xlsx": "^0.18.5",
+    "zone.js": "~0.14.0"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^17.0.0",
+    "@angular/cli": "^17.0.0",
+    "@angular/compiler-cli": "^17.0.0",
+    "@types/jasmine": "~5.1.0",
+    "@types/node": "^18.7.0",
+    "@types/qrcode": "^1.5.6",
+    "autoprefixer": "^10.4.0",
+    "jasmine-core": "~5.1.0",
+    "karma": "~6.4.0",
+    "karma-chrome-launcher": "~3.2.0",
+    "karma-coverage": "~2.2.0",
+    "karma-jasmine": "~5.1.0",
+    "karma-jasmine-html-reporter": "~2.1.0",
+    "postcss": "^8.4.0",
+    "tailwindcss": "^3.3.0",
+    "typescript": "~5.2.0"
+  }
+}

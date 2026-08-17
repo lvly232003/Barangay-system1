@@ -1,0 +1,171 @@
+<div class="cert-preview-page">
+  <div class="cert-toolbar no-print">
+    <div class="max-w-4xl mx-auto px-4 py-3 flex justify-between items-center gap-3">
+      <button type="button" (click)="goBack()" class="flex items-center text-sm font-medium text-slate-600 dark:text-emerald-200/80 hover:text-violet-700">
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+        </svg>
+        Back
+      </button>
+      <div class="flex items-center gap-3">
+        <span class="text-sm text-slate-500 dark:text-emerald-300/70">{{ certificate?.certificateType || 'Certificate' }}</span>
+        <button type="button" (click)="downloadPDF()" [disabled]="!certificate || isLoading || isDownloading" class="btn-primary text-sm disabled:opacity-50">
+          {{ isDownloading ? 'Preparing PDF…' : 'Download PDF' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="cert-stage">
+    <div *ngIf="isLoading" class="card max-w-md w-full text-center">
+      <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-violet-600 mx-auto mb-3"></div>
+      <p class="muted-text">Loading certificate...</p>
+    </div>
+
+    <div *ngIf="error && !isLoading" class="bg-red-50 border border-red-200 rounded-lg p-6 text-center max-w-md w-full">
+      <h3 class="text-lg font-semibold text-red-800 mb-2">Certificate Not Available</h3>
+      <p class="text-red-600 text-sm">{{ error }}</p>
+    </div>
+
+    <div *ngIf="certificate && !isLoading && !error" id="certificate-content" class="cert-sheet">
+      <div class="cert-band">
+        <div class="cert-band-top">
+          <div>
+            <div>Issued: {{ certificate.issuedDate | date:'MMMM d, yyyy' }}</div>
+            <div>{{ certificate.issuedDate | date:'EEEE, h:mm a' }}</div>
+          </div>
+          <div style="text-align:right">
+            <div>{{ certificate.certificateType }}</div>
+            <div>Barangay Management System</div>
+          </div>
+        </div>
+        <div class="cert-band-main">
+          <div class="cert-seal">REPUBLIC<br>OF THE<br>PHILIPPINES</div>
+          <div class="cert-gov">
+            <div class="cert-gov-republic">Republic of the Philippines</div>
+            <div class="cert-gov-line">Province of Zambales</div>
+            <div class="cert-gov-line">City of Olongapo</div>
+            <div class="cert-gov-barangay">Barangay Old Cabalan</div>
+            <div class="cert-gov-office">Office of the Punong Barangay</div>
+          </div>
+          <div class="cert-seal cert-seal--brgy">BARANGAY<br>SEAL</div>
+        </div>
+      </div>
+
+      <div class="cert-letter">
+        <aside class="cert-sidebar">
+          <div class="cert-side-item">
+            <div class="cert-side-icon">A</div>
+            <div>
+              <div class="cert-side-label">Address</div>
+              Narra Lane Purok 11, Old Cabalan, Olongapo City
+            </div>
+          </div>
+          <div class="cert-side-item">
+            <div class="cert-side-icon">T</div>
+            <div>
+              <div class="cert-side-label">Telephone</div>
+              (047) 223 - 1629
+            </div>
+          </div>
+          <div class="cert-side-item">
+            <div class="cert-side-icon">E</div>
+            <div>
+              <div class="cert-side-label">Email</div>
+              brg.oldcabalan.1988&#64;gmail.com
+            </div>
+          </div>
+          <div class="cert-side-item">
+            <div class="cert-side-icon">F</div>
+            <div>
+              <div class="cert-side-label">Facebook</div>
+              /barangay.oldcabalan
+            </div>
+          </div>
+
+          <div class="cert-qr-block">
+            <div class="cert-qr-caption">For more information:</div>
+            <div class="cert-qr-frame">
+              <img *ngIf="qrDataUrl" [src]="qrDataUrl" alt="Certificate QR code" />
+            </div>
+            <div class="cert-scan-me">Scan me!</div>
+            <div class="cert-year">{{ certYear }}</div>
+          </div>
+        </aside>
+
+        <div class="cert-main">
+          <div class="cert-title-block">
+            <div class="cert-office">Office of the Barangay Captain</div>
+            <h1 class="cert-title">{{ certificate.certificateType }}</h1>
+            <div class="cert-subtitle">Official Certification</div>
+            <div class="cert-rule"></div>
+          </div>
+
+          <div class="cert-meta" [class.cert-meta--2]="!certificate.expiryDate">
+            <div>
+              <div class="cert-meta-label">Certificate Number:</div>
+              <div class="cert-meta-value">{{ certificate.certificateNumber }}</div>
+            </div>
+            <div>
+              <div class="cert-meta-label">Issued Date:</div>
+              <div class="cert-meta-value">{{ certificate.issuedDate | date:'MMM d, yyyy' }}</div>
+            </div>
+            <div *ngIf="certificate.expiryDate">
+              <div class="cert-meta-label">Valid Until:</div>
+              <div class="cert-meta-value">{{ certificate.expiryDate | date:'MMM d, yyyy' }}</div>
+            </div>
+          </div>
+
+          <div class="cert-whom">Certification for:</div>
+          <div class="cert-subject">
+            <div class="cert-subject-name">{{ certificate.userName }}</div>
+            <div class="cert-subject-role">Resident / Applicant</div>
+          </div>
+
+          <div class="cert-copy">
+            <p>
+              This is to certify that <strong class="accent">{{ certificate.userName }}</strong>
+              is a <strong>bona fide resident</strong> of
+              <strong>Barangay Old Cabalan, City of Olongapo, Province of Zambales</strong>
+              and is hereby granted this
+              <strong class="accent">{{ certificate.certificateType }}</strong>.
+            </p>
+            <p>
+              This certification is issued in accordance with the
+              <strong>Local Government Code of 1991</strong> for whatever legal purpose it may serve.
+            </p>
+            <div class="cert-purpose">
+              <strong>PURPOSE:</strong>
+              {{ certificate.purpose || 'Employment applications, government transactions, and other official requirements.' }}
+            </div>
+            <div class="cert-given">
+              Given this <strong>{{ certificate.issuedDate | date:'MMMM d, yyyy' }}</strong>
+              at the Office of the Punong Barangay, Barangay Old Cabalan, Olongapo City.
+            </div>
+          </div>
+
+          <div class="cert-bottom">
+            <div class="cert-sign">
+              <div class="cert-sign-line"></div>
+              <div class="cert-sign-name">EDMER T. LUCIDO</div>
+              <div class="cert-sign-role">Barangay Secretary</div>
+            </div>
+            <div class="cert-sign">
+              <div class="cert-sign-line"></div>
+              <div class="cert-sign-name">HON. RONALDO A. ALBA JR</div>
+              <div class="cert-sign-role">Punong Barangay</div>
+            </div>
+          </div>
+
+          <div class="cert-footer">
+            <div class="cert-footer-motto">Serbisyong Barangay, Ilalapit sa Inyong Bahay</div>
+            <div class="cert-footer-row">
+              <span>No. {{ certificate.certificateNumber }} · {{ certificate.status | titlecase }}</span>
+              <span>Page 1 of 1 · Barangay Management System</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

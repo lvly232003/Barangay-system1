@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Confirm your email</title>
+  <!--[if mso]>
+  <style type="text/css">
+    body, table, td { font-family: Arial, Helvetica, sans-serif !important; }
+  </style>
+  <![endif]-->
+</head>
+<body style="margin:0;padding:0;background-color:#f0fdf4;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;">
+  <div style="display:none;max-height:0;overflow:hidden;mso-hide:all;">
+    Confirm your email to finish signing up for Barangay System certificate services.
+  </div>
+
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color:#f0fdf4;border-collapse:collapse;">
+    <tr>
+      <td align="center" style="padding:40px 16px;">
+
+        <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:580px;border-collapse:collapse;background-color:#ffffff;border:1px solid #bbf7d0;border-radius:20px;overflow:hidden;">
+
+          <tr>
+            <td style="height:6px;line-height:6px;font-size:0;background-color:#059669;">&nbsp;</td>
+          </tr>
+
+          <tr>
+            <td align="center" style="background-color:#047857;padding:36px 28px 32px;">
+              <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="border-collapse:collapse;">
+                <tr>
+                  <td align="center" style="background-color:#059669;border:1px solid #34d399;border-radius:999px;padding:6px 14px;">
+                    <span style="font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#ecfdf5;">
+                      Barangay System
+                    </span>
+                  </td>
+                </tr>
+              </table>
+              <p style="margin:18px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.4;letter-spacing:0.06em;text-transform:uppercase;color:#a7f3d0;">
+                Appointment Certificate Management System
+              </p>
+              <h1 style="margin:12px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:28px;line-height:1.25;font-weight:700;color:#ffffff;">
+                Confirm your email
+              </h1>
+              <p style="margin:12px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.5;color:#d1fae5;">
+                One step left to activate your resident account
+              </p>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding:36px 32px 12px;font-family:Arial,Helvetica,sans-serif;">
+              <p style="margin:0 0 18px;font-size:17px;line-height:1.5;font-weight:700;color:#064e3b;">
+                Hello{{ if .Data.first_name }} {{ .Data.first_name }}{{ else }} there{{ end }},
+              </p>
+              <p style="margin:0 0 16px;font-size:15px;line-height:1.65;color:#374151;">
+                Thanks for registering with the
+                <strong style="color:#047857;">Barangay Appointment Certificate Management System</strong>.
+                Confirm this email to request certificates, book appointments, and access citizen services online.
+              </p>
+              <p style="margin:0 0 28px;font-size:14px;line-height:1.6;color:#6b7280;">
+                This link verifies that <strong style="color:#065f46;">{{ .Email }}</strong> belongs to you.
+              </p>
+
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="border-collapse:collapse;">
+                <tr>
+                  <td align="center" style="padding:0 0 28px;">
+                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="border-collapse:collapse;">
+                      <tr>
+                        <td align="center" bgcolor="#059669" style="border-radius:12px;background-color:#059669;">
+                          <a href="{{ .ConfirmationURL }}"
+                             target="_blank"
+                             style="display:inline-block;padding:16px 36px;font-family:Arial,Helvetica,sans-serif;font-size:16px;font-weight:700;line-height:1.2;color:#ffffff;text-decoration:none;border-radius:12px;">
+                            Confirm email address
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="border-collapse:collapse;">
+                <tr>
+                  <td style="padding:16px 18px;background-color:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;">
+                    <p style="margin:0 0 8px;font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:#64748b;">
+                      Button not working?
+                    </p>
+                    <p style="margin:0 0 6px;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#6b7280;">
+                      Copy and paste this link into your browser:
+                    </p>
+                    <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.55;word-break:break-all;">
+                      <a href="{{ .ConfirmationURL }}" style="color:#047857;text-decoration:underline;">{{ .ConfirmationURL }}</a>
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding:28px 32px 8px;font-family:Arial,Helvetica,sans-serif;">
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="border-collapse:collapse;background-color:#ecfdf5;border:1px solid #a7f3d0;border-radius:14px;">
+                <tr>
+                  <td width="33%" valign="top" style="padding:16px 10px;text-align:center;">
+                    <p style="margin:0;font-size:12px;line-height:1.35;font-weight:700;color:#047857;">Certificates</p>
+                    <p style="margin:4px 0 0;font-size:11px;line-height:1.4;color:#6b7280;">Request online</p>
+                  </td>
+                  <td width="33%" valign="top" style="padding:16px 10px;text-align:center;border-left:1px solid #a7f3d0;border-right:1px solid #a7f3d0;">
+                    <p style="margin:0;font-size:12px;line-height:1.35;font-weight:700;color:#047857;">Appointments</p>
+                    <p style="margin:4px 0 0;font-size:11px;line-height:1.4;color:#6b7280;">Book your slot</p>
+                  </td>
+                  <td width="33%" valign="top" style="padding:16px 10px;text-align:center;">
+                    <p style="margin:0;font-size:12px;line-height:1.35;font-weight:700;color:#047857;">Court booking</p>
+                    <p style="margin:4px 0 0;font-size:11px;line-height:1.4;color:#6b7280;">Reserve courts</p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding:28px 32px 32px;font-family:Arial,Helvetica,sans-serif;">
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="border-collapse:collapse;border-top:1px solid #d1fae5;">
+                <tr>
+                  <td style="padding-top:20px;">
+                    <p style="margin:0 0 8px;font-size:12px;line-height:1.55;color:#6b7280;">
+                      If you did not create this account, you can safely ignore this email.
+                    </p>
+                    <p style="margin:0;font-size:12px;line-height:1.55;color:#047857;font-weight:700;">
+                      Barangay System<br>
+                      <span style="font-weight:400;color:#6b7280;">Appointment Certificate Management</span>
+                    </p>
+                    <p style="margin:14px 0 0;font-size:11px;line-height:1.4;color:#94a3b8;">
+                      © Barangay Appointment Certificate Management System
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+        </table>
+
+        <p style="margin:20px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:11px;line-height:1.4;color:#86efac;">
+          Secure resident portal · Do not share this confirmation link
+        </p>
+
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

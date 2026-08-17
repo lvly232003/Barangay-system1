@@ -1,0 +1,101 @@
+<div class="p-6 page-shell min-h-full">
+  <div class="mb-8 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
+    <div>
+      <h1 class="text-3xl font-bold text-gray-900 dark:text-emerald-50">Admin Dashboard</h1>
+      <p class="text-gray-600 dark:text-emerald-200/70 mt-2">
+        Live overview from Supabase: residents, appointments, certificates, and system health.
+      </p>
+    </div>
+    <div class="flex flex-wrap gap-2">
+      <button type="button" (click)="navigateToReports()" class="btn-primary">Open Reports</button>
+      <button type="button" (click)="navigateToMuseum()" class="btn-outline">Certificate Museum</button>
+    </div>
+  </div>
+
+  <div *ngIf="loadError" class="mb-6 rounded-lg border border-amber-300 bg-amber-50 dark:bg-amber-950/40 dark:border-amber-800 px-4 py-3 text-sm text-amber-900 dark:text-amber-100">
+    {{ loadError }}
+  </div>
+
+  <!-- Statistics Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
+    <div class="card">
+      <p class="text-sm font-medium text-gray-500 dark:text-emerald-300/60">Total Users</p>
+      <p class="text-3xl font-semibold text-gray-900 dark:text-emerald-50 mt-1">{{ stats.totalUsers }}</p>
+      <p class="text-xs text-emerald-700 dark:text-emerald-300 mt-2">
+        {{ stats.totalResidents }} residents · {{ stats.totalStaff }} staff
+      </p>
+    </div>
+    <div class="card">
+      <p class="text-sm font-medium text-gray-500 dark:text-emerald-300/60">Pending Appointments</p>
+      <p class="text-3xl font-semibold text-amber-600 dark:text-amber-300 mt-1">{{ stats.pendingAppointments }}</p>
+      <p class="text-xs muted-text mt-2">{{ stats.approvedAppointments }} approved in queue</p>
+    </div>
+    <div class="card">
+      <p class="text-sm font-medium text-gray-500 dark:text-emerald-300/60">Completed Appointments</p>
+      <p class="text-3xl font-semibold text-emerald-600 dark:text-emerald-300 mt-1">{{ stats.completedAppointments }}</p>
+      <p class="text-xs muted-text mt-2">{{ stats.rejectedAppointments }} rejected</p>
+    </div>
+    <div class="card">
+      <p class="text-sm font-medium text-gray-500 dark:text-emerald-300/60">Certificates</p>
+      <p class="text-3xl font-semibold text-teal-600 dark:text-teal-300 mt-1">{{ stats.totalCertificates }}</p>
+      <p class="text-xs muted-text mt-2">{{ stats.issuedCertificates }} issued</p>
+    </div>
+  </div>
+
+  <!-- Crazy charts -->
+  <div class="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-8">
+    <div class="card overflow-hidden">
+      <div #appointmentsChart></div>
+    </div>
+    <div class="card overflow-hidden">
+      <div #usersChart></div>
+    </div>
+    <div class="card overflow-hidden">
+      <div #certsChart></div>
+    </div>
+    <div class="card overflow-hidden">
+      <div #radialChart></div>
+    </div>
+  </div>
+
+  <!-- Recent Activities / Quick Actions -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div class="card">
+      <h3 class="text-lg font-semibold text-gray-900 dark:text-emerald-50 mb-4">Recent Activities</h3>
+      <div class="space-y-4" *ngIf="recentActivities.length; else noActivity">
+        <div *ngFor="let activity of recentActivities" class="flex items-start space-x-3">
+          <div class="flex-shrink-0 w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-900/60 flex items-center justify-center">
+            <svg class="w-4 h-4 text-emerald-700 dark:text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="text-sm text-gray-900 dark:text-emerald-50">{{ activity.description }}</p>
+            <p class="text-xs text-gray-500 dark:text-emerald-300/60">{{ activity.time }} · {{ activity.status }}</p>
+          </div>
+        </div>
+      </div>
+      <ng-template #noActivity>
+        <p class="text-sm muted-text">No recent appointment activity yet.</p>
+      </ng-template>
+    </div>
+
+    <div class="card">
+      <h3 class="text-lg font-semibold text-gray-900 dark:text-emerald-50 mb-4">Quick Actions</h3>
+      <div class="space-y-3">
+        <button type="button" (click)="navigateToAppointments()" class="w-full btn-primary text-left">
+          Manage Appointments
+        </button>
+        <button type="button" (click)="navigateToUsers()" class="w-full btn-secondary text-left">
+          Manage Users
+        </button>
+        <button type="button" (click)="navigateToDocuments()" class="w-full btn-outline text-left">
+          Manage Documents
+        </button>
+        <button type="button" (click)="navigateToMuseum()" class="w-full btn-outline text-left">
+          Certificate Formats &amp; Museum
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

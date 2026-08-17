@@ -1,0 +1,194 @@
+<div class="min-h-full page-shell">
+  <div class="bg-white dark:bg-surface-dark-elevated shadow-lg border-b-4 border-emerald-600">
+    <div class="max-w-7xl mx-auto px-6 py-8">
+      <div class="text-center">
+        <div class="flex items-center justify-center mb-4">
+          <div class="w-16 h-16 bg-gradient-to-br from-emerald-600 to-teal-600 rounded-full flex items-center justify-center mr-4">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            </svg>
+          </div>
+          <div class="text-left">
+            <h1 class="text-4xl font-bold text-gray-900 dark:text-emerald-50">Certificate Museum</h1>
+            <p class="text-lg text-gray-600 dark:text-emerald-200/70 mt-1">Formats, coverage, and sample archive</p>
+          </div>
+        </div>
+
+        <div class="bg-emerald-50 border-l-4 border-emerald-500 p-4 rounded-lg max-w-3xl mx-auto text-left">
+          <p class="text-slate-800 text-base leading-relaxed">
+            Welcome to the Barangay Certificate Archive. Browse official
+            <strong>certificate formats</strong>, see what each document
+            <strong>covers</strong>, and open printable sample layouts residents receive.
+          </p>
+        </div>
+
+        <div class="mt-6 flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600 dark:text-emerald-200/70">
+          <div class="flex items-center">
+            <span class="w-3 h-3 bg-emerald-500 rounded-full mr-2"></span>
+            Formats: <strong class="ml-1 text-gray-900 dark:text-emerald-50">{{ formats.length }}</strong>
+          </div>
+          <div class="flex items-center">
+            <span class="w-3 h-3 bg-teal-500 rounded-full mr-2"></span>
+            Coverage areas: <strong class="ml-1 text-gray-900 dark:text-emerald-50">{{ getCoverageCount() }}</strong>
+          </div>
+          <div class="flex items-center">
+            <span class="w-3 h-3 bg-cyan-500 rounded-full mr-2"></span>
+            Museum samples: <strong class="ml-1 text-gray-900 dark:text-emerald-50">{{ certificates.length }}</strong>
+          </div>
+        </div>
+
+        <div class="mt-8 inline-flex rounded-lg border border-emerald-200 dark:border-emerald-800 overflow-hidden">
+          <button type="button" (click)="activeTab = 'formats'"
+            class="px-4 py-2 text-sm font-semibold"
+            [class.bg-emerald-600]="activeTab === 'formats'"
+            [class.text-white]="activeTab === 'formats'"
+            [class.bg-white]="activeTab !== 'formats'"
+            [class.dark:bg-surface-dark]="activeTab !== 'formats'"
+            [class.text-emerald-800]="activeTab !== 'formats'"
+            [class.dark:text-emerald-100]="activeTab !== 'formats'">
+            Certificate Formats
+          </button>
+          <button type="button" (click)="activeTab = 'coverage'"
+            class="px-4 py-2 text-sm font-semibold border-l border-emerald-200 dark:border-emerald-800"
+            [class.bg-emerald-600]="activeTab === 'coverage'"
+            [class.text-white]="activeTab === 'coverage'"
+            [class.bg-white]="activeTab !== 'coverage'"
+            [class.dark:bg-surface-dark]="activeTab !== 'coverage'"
+            [class.text-emerald-800]="activeTab !== 'coverage'"
+            [class.dark:text-emerald-100]="activeTab !== 'coverage'">
+            Coverage
+          </button>
+          <button type="button" (click)="activeTab = 'archive'"
+            class="px-4 py-2 text-sm font-semibold border-l border-emerald-200 dark:border-emerald-800"
+            [class.bg-emerald-600]="activeTab === 'archive'"
+            [class.text-white]="activeTab === 'archive'"
+            [class.bg-white]="activeTab !== 'archive'"
+            [class.dark:bg-surface-dark]="activeTab !== 'archive'"
+            [class.text-emerald-800]="activeTab !== 'archive'"
+            [class.dark:text-emerald-100]="activeTab !== 'archive'">
+            Sample Archive
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-6 py-8">
+    <!-- FORMATS -->
+    <div *ngIf="activeTab === 'formats'" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div *ngFor="let format of formats" class="card hover:shadow-xl transition-shadow">
+        <div class="flex items-start justify-between gap-3 mb-3">
+          <div>
+            <p class="text-xs uppercase tracking-wide text-emerald-700 dark:text-emerald-300 font-semibold">{{ format.type }}</p>
+            <h3 class="text-xl font-bold text-gray-900 dark:text-emerald-50">{{ format.name }}</h3>
+          </div>
+          <span class="text-sm font-semibold text-teal-700 dark:text-teal-300">{{ formatFee(format.fee) }}</span>
+        </div>
+        <p class="text-sm text-slate-700 dark:text-emerald-100/90 mb-4">{{ format.description }}</p>
+        <p class="text-xs muted-text mb-2">Processing: {{ format.processingTime || '1 day' }}</p>
+        <div class="mb-4">
+          <p class="text-xs font-semibold text-slate-600 dark:text-emerald-200/80 mb-1">Requirements</p>
+          <div class="flex flex-wrap gap-2">
+            <span *ngFor="let req of format.requirements"
+              class="text-xs px-2 py-1 rounded bg-emerald-50 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-200 border border-emerald-100 dark:border-emerald-800">
+              {{ req }}
+            </span>
+          </div>
+        </div>
+        <button type="button" (click)="previewFormat(format)" class="w-full btn-primary">
+          Preview printable format
+        </button>
+      </div>
+    </div>
+
+    <!-- COVERAGE -->
+    <div *ngIf="activeTab === 'coverage'" class="space-y-6">
+      <div class="card">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-emerald-50 mb-2">Certificate coverage map</h3>
+        <p class="text-sm muted-text mb-4">
+          Each format below lists the real-world use cases this barangay supports for residents.
+        </p>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div *ngFor="let format of formats" class="card">
+          <h4 class="font-bold text-emerald-800 dark:text-emerald-200 mb-3">{{ format.name }}</h4>
+          <ul class="space-y-2">
+            <li *ngFor="let item of format.coverage" class="flex items-start gap-2 text-sm text-slate-800 dark:text-emerald-50">
+              <span class="mt-1 w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>
+              <span>{{ item }}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ARCHIVE -->
+    <div *ngIf="activeTab === 'archive'">
+      <div class="mb-8 card">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div class="flex flex-col sm:flex-row gap-3 flex-1">
+            <input
+              type="text"
+              placeholder="Search sample certificates..."
+              class="input-field"
+              [(ngModel)]="searchTerm"
+              (input)="filterCertificates()" />
+            <select class="input-field sm:max-w-xs" [(ngModel)]="selectedType" (change)="filterCertificates()">
+              <option value="">All Types</option>
+              <option *ngFor="let t of getUniqueTypes()" [value]="t">{{ t }}</option>
+            </select>
+          </div>
+          <div class="text-sm muted-text">
+            Showing {{ filteredCertificates.length }} of {{ certificates.length }} samples
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div *ngFor="let certificate of filteredCertificates" class="card overflow-hidden p-0">
+          <div class="bg-gradient-to-r from-emerald-700 to-teal-600 text-white p-4">
+            <div class="flex items-center justify-between gap-2">
+              <div>
+                <h3 class="font-bold text-lg">{{ certificate.certificateType }}</h3>
+                <p class="text-sm opacity-90">{{ certificate.certificateNumber }}</p>
+              </div>
+              <span [class]="getStatusBadgeClass(certificate.status)" class="px-3 py-1 rounded-full text-xs font-semibold">
+                {{ certificate.status | titlecase }}
+              </span>
+            </div>
+          </div>
+          <div class="p-5 space-y-3">
+            <div>
+              <p class="text-xs muted-text">Issued to</p>
+              <p class="font-semibold text-gray-900 dark:text-emerald-50">{{ certificate.userName }}</p>
+            </div>
+            <div>
+              <p class="text-xs muted-text">Issued</p>
+              <p class="font-semibold text-gray-900 dark:text-emerald-50">{{ formatDate(certificate.issuedDate) }}</p>
+            </div>
+            <p *ngIf="certificate.notes" class="text-sm text-slate-700 dark:text-emerald-100/90 bg-emerald-50/80 dark:bg-emerald-950/40 p-3 rounded-lg">
+              {{ certificate.notes }}
+            </p>
+            <button type="button" (click)="showCertificate(certificate)" class="w-full btn-primary">
+              View certificate
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="filteredCertificates.length === 0" class="text-center py-16 card">
+        <h3 class="text-xl font-semibold text-gray-900 dark:text-emerald-50 mb-2">No sample certificates yet</h3>
+        <p class="muted-text mb-4 max-w-lg mx-auto">
+          Run <code class="text-emerald-700 dark:text-emerald-300">supabase/sql/13_sample_museum_certificates.sql</code>
+          in Supabase, or open a format preview above — those work without seeded rows.
+        </p>
+        <button *ngIf="certificates.length > 0" type="button" (click)="clearFilters()" class="btn-outline">
+          Clear Filters
+        </button>
+        <button type="button" (click)="activeTab = 'formats'" class="btn-primary ml-2">
+          Browse Formats
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

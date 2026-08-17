@@ -1,0 +1,31 @@
+:host {
+  display: inline-flex;
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgb(167 243 208);
+  background: rgb(236 253 245);
+  color: rgb(4 120 87);
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
+}
+
+.theme-toggle:hover {
+  background: rgb(209 250 229);
+  transform: translateY(-1px);
+}
+
+:host-context(html.dark) .theme-toggle {
+  border-color: rgb(6 78 59);
+  background: rgb(2 44 34);
+  color: rgb(110 231 183);
+}
+
+:host-context(html.dark) .theme-toggle:hover {
+  background: rgb(6 78 59);
+}

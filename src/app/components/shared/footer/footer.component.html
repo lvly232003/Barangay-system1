@@ -1,0 +1,39 @@
+<footer class="bg-gradient-to-r from-emerald-800 via-emerald-700 to-teal-800 text-white dark:from-emerald-950 dark:via-emerald-900 dark:to-teal-950">
+  <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div class="col-span-1 md:col-span-2">
+        <h3 class="text-lg font-semibold mb-4">Barangay Appointment Certificate Management System</h3>
+        <p class="text-emerald-100/80 mb-4">
+          A comprehensive digital platform for efficient barangay certificate appointment management,
+          citizen services, and document processing for Barangay Old Cabalan, Olongapo City.
+        </p>
+      </div>
+
+      <div>
+        <h4 class="text-sm font-semibold uppercase tracking-wider mb-4 text-emerald-100">Explore</h4>
+        <ul class="space-y-2">
+          <li><a routerLink="/about" class="text-emerald-100/80 hover:text-white" (click)="goToSection($event, 'about')">About</a></li>
+          <li><a routerLink="/services" class="text-emerald-100/80 hover:text-white" (click)="goToSection($event, 'services')">Services</a></li>
+          <li><a routerLink="/contact" class="text-emerald-100/80 hover:text-white" (click)="goToSection($event, 'contact')">Contact</a></li>
+          <li><a routerLink="/login" class="text-emerald-100/80 hover:text-white">Citizen Login</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="text-sm font-semibold uppercase tracking-wider mb-4 text-emerald-100">Contact</h4>
+        <ul class="space-y-2 text-emerald-100/80">
+          <li>Narra Lane Purok 11, Old Cabalan</li>
+          <li>Olongapo City</li>
+          <li>Phone: (047) 223 - 1629</li>
+          <li>Email: brg.oldcabalan.1988&#64;gmail.com</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mt-8 pt-8 border-t border-emerald-600/40">
+      <p class="text-center text-emerald-100/70">
+        © {{ currentYear }} Barangay Management System. All rights reserved.
+      </p>
+    </div>
+  </div>
+</footer>

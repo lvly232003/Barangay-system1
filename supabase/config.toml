@@ -1,0 +1,3 @@
+# Edge Function: public registration (no user JWT)
+[functions.register]
+verify_jwt = false

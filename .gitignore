@@ -1,0 +1,22 @@
+# Dependencies
+/node_modules
+
+# Build
+/dist
+/.angular
+
+# IDE / OS
+.idea
+.cursor
+.vscode/*
+!.vscode/extensions.json
+.DS_Store
+*.log
+
+# Env / secrets (keep committed env files; never commit real secret keys)
+.env
+.env.local
+.env.*.local
+
+# Vercel
+.vercel

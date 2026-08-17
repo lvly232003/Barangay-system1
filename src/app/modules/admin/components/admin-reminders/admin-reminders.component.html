@@ -1,0 +1,103 @@
+<div class="p-6 page-shell min-h-full">
+  <div class="mb-6 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
+    <div>
+      <h1 class="text-3xl font-bold text-gray-900 dark:text-emerald-50">Pickup Reminder File</h1>
+      <p class="text-gray-600 dark:text-emerald-200/70 mt-2">
+        Shared pickup file for admin and staff. Residents get their own pickup notices when requests are approved or ready.
+      </p>
+    </div>
+    <div class="flex flex-wrap gap-2">
+      <button type="button" class="btn-outline" (click)="markAllAsRead()" [disabled]="!reminders.length || markingAll">
+        {{ markingAll ? 'Marking…' : 'Mark all as read' }}
+      </button>
+      <button type="button" class="btn-outline" (click)="restoreDismissed()">Restore dismissed</button>
+      <button type="button" class="btn-primary" (click)="refresh()" [disabled]="loading">
+        {{ loading ? 'Refreshing…' : 'Refresh reminders' }}
+      </button>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+    <div class="card py-4">
+      <p class="text-xs muted-text">Pickup alerts</p>
+      <p class="text-2xl font-bold text-rose-600 dark:text-rose-300">{{ counts.pickupTotal }}</p>
+    </div>
+    <div class="card py-4">
+      <p class="text-xs muted-text">Pending review</p>
+      <p class="text-2xl font-bold text-amber-600 dark:text-amber-300">{{ counts.pendingTotal }}</p>
+    </div>
+    <div class="card py-4">
+      <p class="text-xs muted-text">Documents</p>
+      <p class="text-2xl font-bold text-emerald-700 dark:text-emerald-300">{{ counts.documents }}</p>
+    </div>
+    <div class="card py-4">
+      <p class="text-xs muted-text">Appointments</p>
+      <p class="text-2xl font-bold text-teal-700 dark:text-teal-300">{{ counts.appointments }}</p>
+    </div>
+  </div>
+
+  <div class="card mb-6">
+    <div class="flex flex-wrap gap-2">
+      <button type="button" class="px-3 py-1.5 rounded-lg text-sm font-semibold"
+        [class.bg-emerald-600]="filter === 'all'" [class.text-white]="filter === 'all'"
+        [class.bg-emerald-50]="filter !== 'all'" [class.text-emerald-800]="filter !== 'all'"
+        (click)="setFilter('all')">All</button>
+      <button type="button" class="px-3 py-1.5 rounded-lg text-sm font-semibold"
+        [class.bg-emerald-600]="filter === 'pickup'" [class.text-white]="filter === 'pickup'"
+        [class.bg-emerald-50]="filter !== 'pickup'" [class.text-emerald-800]="filter !== 'pickup'"
+        (click)="setFilter('pickup')">Pickup</button>
+      <button type="button" class="px-3 py-1.5 rounded-lg text-sm font-semibold"
+        [class.bg-emerald-600]="filter === 'pending'" [class.text-white]="filter === 'pending'"
+        [class.bg-emerald-50]="filter !== 'pending'" [class.text-emerald-800]="filter !== 'pending'"
+        (click)="setFilter('pending')">Pending</button>
+      <button type="button" class="px-3 py-1.5 rounded-lg text-sm font-semibold"
+        [class.bg-emerald-600]="filter === 'document'" [class.text-white]="filter === 'document'"
+        [class.bg-emerald-50]="filter !== 'document'" [class.text-emerald-800]="filter !== 'document'"
+        (click)="setFilter('document')">Documents</button>
+      <button type="button" class="px-3 py-1.5 rounded-lg text-sm font-semibold"
+        [class.bg-emerald-600]="filter === 'appointment'" [class.text-white]="filter === 'appointment'"
+        [class.bg-emerald-50]="filter !== 'appointment'" [class.text-emerald-800]="filter !== 'appointment'"
+        (click)="setFilter('appointment')">Appointments</button>
+    </div>
+  </div>
+
+  <div class="space-y-3" *ngIf="reminders.length; else empty">
+    <button
+      type="button"
+      *ngFor="let reminder of reminders"
+      (click)="open(reminder)"
+      class="card w-full text-left hover:shadow-lg transition-shadow">
+      <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-3">
+        <div>
+          <div class="flex flex-wrap items-center gap-2 mb-2">
+            <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full" [ngClass]="urgencyClass(reminder.urgency)">
+              {{ reminder.urgency }}
+            </span>
+            <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 dark:bg-emerald-950 dark:text-emerald-200">
+              {{ reminder.kind }}
+            </span>
+            <span class="text-xs muted-text">{{ reminder.reference }}</span>
+          </div>
+          <h3 class="text-base font-bold text-slate-900 dark:text-emerald-50">{{ reminder.title }}</h3>
+          <p class="text-sm muted-text mt-1">{{ reminder.message }}</p>
+          <p class="text-xs text-emerald-700 dark:text-emerald-300 mt-2">
+            {{ reminder.residentName }} · {{ formatDate(reminder.createdAt) }}
+          </p>
+        </div>
+        <div class="flex gap-2 shrink-0">
+          <button type="button" class="btn-outline text-sm" (click)="dismiss(reminder, $event)">Dismiss</button>
+          <span class="btn-primary text-sm pointer-events-none">Open section</span>
+        </div>
+      </div>
+    </button>
+  </div>
+
+  <ng-template #empty>
+    <div class="card text-center py-12">
+      <h3 class="text-lg font-semibold text-slate-900 dark:text-emerald-50">Reminder file is clear</h3>
+      <p class="muted-text mt-2 max-w-md mx-auto">
+        No active pickup or pending reminders. New approved / ready requests will appear here automatically.
+      </p>
+    </div>
+  </ng-template>
+</div>

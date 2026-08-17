@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your registration OTP</title>
+</head>
+<body style="margin:0;padding:0;background-color:#f0fdf4;font-family:Arial,Helvetica,sans-serif;">
+  <!--
+    EmailJS ONLY template — Registration OTP (no confirm links).
+    To Email: {{to_email}}
+    Subject: Your Barangay System registration code
+
+    Variables:
+      {{to_email}} {{to_name}} {{first_name}} {{otp_code}} {{expiry_minutes}}
+      {{site_name}} {{barangay_name}} {{from_name}}
+  -->
+
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color:#f0fdf4;border-collapse:collapse;">
+    <tr>
+      <td align="center" style="padding:40px 16px;">
+        <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:560px;border-collapse:collapse;background-color:#ffffff;border:1px solid #bbf7d0;border-radius:20px;overflow:hidden;">
+
+          <tr>
+            <td style="height:6px;line-height:6px;font-size:0;background-color:#059669;">&nbsp;</td>
+          </tr>
+
+          <tr>
+            <td align="center" style="background-color:#047857;padding:32px 28px;">
+              <span style="display:inline-block;background-color:#059669;border:1px solid #34d399;border-radius:999px;padding:6px 14px;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#ecfdf5;">
+                {{barangay_name}} · Registration
+              </span>
+              <h1 style="margin:14px 0 0;font-size:26px;line-height:1.25;font-weight:700;color:#ffffff;">
+                Your one-time code
+              </h1>
+              <p style="margin:10px 0 0;font-size:14px;color:#d1fae5;">
+                Use this OTP to finish creating your account
+              </p>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding:32px 28px;">
+              <p style="margin:0 0 14px;font-size:16px;font-weight:700;color:#064e3b;">
+                Hello {{first_name}},
+              </p>
+              <p style="margin:0 0 20px;font-size:15px;line-height:1.6;color:#374151;">
+                Here is your registration code for <strong>{{site_name}}</strong>.
+                Enter this OTP on the registration screen to continue:
+              </p>
+
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+                <tr>
+                  <td align="center" style="padding:18px;background-color:#ecfdf5;border:2px dashed #059669;border-radius:14px;">
+                    <p style="margin:0;font-size:36px;font-weight:800;letter-spacing:10px;color:#047857;font-family:Consolas,Monaco,monospace;">
+                      {{otp_code}}
+                    </p>
+                  </td>
+                </tr>
+              </table>
+
+              <p style="margin:20px 0 0;font-size:13px;line-height:1.55;color:#6b7280;">
+                This code expires in <strong style="color:#047857;">{{expiry_minutes}} minutes</strong>.
+                Do not share it with anyone. If you did not register, ignore this email.
+              </p>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding:0 28px 28px;">
+              <p style="margin:0;padding-top:16px;border-top:1px solid #d1fae5;font-size:12px;color:#94a3b8;">
+                Office of the Punong Barangay · {{barangay_name}}, Old Cabalan, Olongapo City
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

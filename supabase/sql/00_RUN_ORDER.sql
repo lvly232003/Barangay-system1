@@ -1,0 +1,65 @@
+-- =============================================================================
+-- HOW TO RUN (copy/paste into Supabase → SQL Editor)
+-- =============================================================================
+-- Option A (recommended once): paste ALL_IN_ONE.sql and Run
+-- Option B (admin login still broken?): paste only 12_fix_admin_gmail_login.sql
+-- Option B2 (empty Certificate Museum archive?): paste 13_sample_museum_certificates.sql
+-- Option C (step-by-step):
+--   01_extensions_and_enums.sql
+--   02_profiles.sql
+--   03_certificate_forms.sql
+--   04_appointments.sql
+--   05_certificates.sql
+--   06_basketball_courts.sql
+--   07_basketball_reservations.sql
+--   08_system_settings.sql
+--   09_rls_policies.sql
+--   10_seed_reference_data.sql
+--   11_demo_accounts.sql
+--   12_fix_admin_gmail_login.sql
+--   13_sample_museum_certificates.sql
+--   14_basketball_queue_fcfs.sql   ← existing DB: FCFS queue numbers for courts
+--   15_profile_extended_fields.sql ← staff/admin job fields + demo profile details
+--   16_pickup_reminders.sql        ← pickup notifications for admin/staff/residents
+--   17_system_settings_extended.sql← extra Admin Settings keys in system_settings
+--   18_storage_optional.sql        ← optional docs bucket (app runs without Storage)
+--   19_supabase_grants.sql         ← GRANT execute on RLS helpers (fixes empty admin dashboard)
+--   20_fix_appointments_display.sql← backfill certificate/status/date fields on appointments
+--   21_new_certificate_samples.sql ← museum samples + cert rows for newer certificate types
+--   22_fix_barangay_address.sql    ← Old Cabalan hall address (Narra Lane Purok 11, Olongapo City)
+--
+-- Quick patch (courts already exist): run only 14_basketball_queue_fcfs.sql
+-- Quick patch (profiles): run only 15_profile_extended_fields.sql
+-- Quick patch (reminders): run only 16_pickup_reminders.sql
+-- Quick patch (settings keys): run only 17_system_settings_extended.sql
+-- Quick patch (storage bucket): run only 18_storage_optional.sql
+-- Quick patch (empty dashboard / RLS): run only 19_supabase_grants.sql
+-- Quick patch (blank document table columns): run only 20_fix_appointments_display.sql
+-- Quick patch (new certificate types / Show Certificate missing): run only 21_new_certificate_samples.sql
+-- Quick patch (wrong Clib/Hagonoy address): run only 22_fix_barangay_address.sql
+--   Note: "Storage Unhealthy" after restore = wait/restart project; not fixed by SQL.
+--
+-- STORE OF RECORD: Supabase Postgres (profiles, appointments, certificates,
+-- certificate_forms, basketball_*, system_settings, pickup_reminders) + Auth.
+-- Storage is optional. Angular uses the publishable key + RLS only — never ship the secret key.
+-- Demo logins (use /login for all roles — must match Angular login page):
+--   admin@gmail.com   / admin123   ← Admin & Staff Portal
+--   staff@gmail.com   / staff123
+--   user@gmail.com    / user123
+--
+-- Project URL: https://udvyynbpzbhdmgwbkjkd.supabase.co
+-- Frontend uses publishable key only (RLS required).
+--
+-- Auth tip:
+-- Confirm email = OFF. Registration verifies via EmailJS OTP only.
+-- See supabase/EMAILJS_SETUP.md
+--
+-- Demo users are seeded with email_confirmed_at set.
+--
+-- If login says "Invalid login credentials", the Auth user is missing or the
+-- password was changed — re-run 12_fix_admin_gmail_login.sql.
+--
+-- Certificate Museum samples: run 13_sample_museum_certificates.sql
+-- For newer types (Certification, Vehicle, Low Income, Jobseeker, Other): also run 21_new_certificate_samples.sql
+-- (or re-run ALL_IN_ONE.sql which includes both).
+-- =============================================================================

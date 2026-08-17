@@ -1,0 +1,735 @@
+<div class="p-6">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-emerald-50">Request Appointment</h1>
+    <p class="text-gray-600 dark:text-emerald-200/70 mt-2">Select a certificate form and schedule your appointment</p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+    <div *ngFor="let form of certificateForms" class="card cursor-pointer hover:shadow-lg transition-shadow duration-200" (click)="selectCertificate(form.id)">
+      <div class="p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-emerald-50">{{ form.name }}</h3>
+          <span class="text-sm font-medium text-primary-600">{{ form.fee ? ('₱' + form.fee) : 'FREE' }}</span>
+        </div>
+        
+        <p class="text-gray-600 dark:text-emerald-200/70 text-sm mb-4">{{ form.description }}</p>
+        
+        <div class="space-y-2">
+          <div class="text-sm text-gray-500 dark:text-emerald-300/60">
+            <strong>Requirements:</strong>
+            <ul class="mt-1 ml-4 list-disc">
+              <li *ngFor="let req of form.requirements">{{ req }}</li>
+            </ul>
+          </div>
+        </div>
+        
+        <button class="btn-primary w-full mt-4">
+          Request Appointment
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="showForm && selectedForm" class="card">
+    <div class="p-6">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-xl font-semibold text-gray-900 dark:text-emerald-50">Schedule Appointment</h2>
+        <button (click)="cancelRequest()" class="text-gray-500 dark:text-emerald-300/60 hover:text-gray-700">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+
+      <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+        <h3 class="font-semibold text-blue-900">{{ selectedForm.name }}</h3>
+        <p class="text-blue-700 text-sm mt-1">{{ selectedForm.description }}</p>
+        <div class="text-sm text-blue-600 mt-1">
+          Fee: {{ selectedForm.fee ? ('₱' + selectedForm.fee) : 'FREE' }}
+        </div>
+      </div>
+
+      <div class="mb-8">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center" (click)="goToStep(1)" [class.cursor-pointer]="currentStep > 1">
+            <div class="flex items-center justify-center w-10 h-10 rounded-full border-2" 
+                 [class.bg-blue-600]="currentStep >= 1" 
+                 [class.border-blue-600]="currentStep >= 1"
+                 [class.bg-gray-200]="currentStep < 1"
+                 [class.border-gray-300]="currentStep < 1">
+              <svg *ngIf="currentStep > 1" class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span *ngIf="currentStep <= 1" class="text-sm font-semibold" [class.text-blue-600]="currentStep === 1" [class.text-gray-500]="currentStep < 1">1</span>
+            </div>
+            <span class="ml-2 text-sm font-medium" [class.text-blue-600]="currentStep >= 1" [class.text-gray-500]="currentStep < 1">Certificate</span>
+          </div>
+          
+          <div class="flex-1 mx-4 h-0.5" [class.bg-blue-600]="currentStep >= 2" [class.bg-gray-300]="currentStep < 2"></div>
+          
+          <div class="flex items-center" (click)="goToStep(2)" [class.cursor-pointer]="currentStep > 2">
+            <div class="flex items-center justify-center w-10 h-10 rounded-full border-2" 
+                 [class.bg-blue-600]="currentStep >= 2" 
+                 [class.border-blue-600]="currentStep >= 2"
+                 [class.bg-gray-200]="currentStep < 2"
+                 [class.border-gray-300]="currentStep < 2">
+              <svg *ngIf="currentStep > 2" class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span *ngIf="currentStep <= 2" class="text-sm font-semibold" [class.text-blue-600]="currentStep === 2" [class.text-gray-500]="currentStep < 2">2</span>
+            </div>
+            <span class="ml-2 text-sm font-medium" [class.text-blue-600]="currentStep >= 2" [class.text-gray-500]="currentStep < 2">Date & Time</span>
+          </div>
+          
+          <div class="flex-1 mx-4 h-0.5" [class.bg-blue-600]="currentStep >= 3" [class.bg-gray-300]="currentStep < 3"></div>
+          
+          <div class="flex items-center">
+            <div class="flex items-center justify-center w-10 h-10 rounded-full border-2" 
+                 [class.bg-blue-600]="currentStep >= 3" 
+                 [class.border-blue-600]="currentStep >= 3"
+                 [class.bg-gray-200]="currentStep < 3"
+                 [class.border-gray-300]="currentStep < 3">
+              <span class="text-sm font-semibold" [class.text-blue-600]="currentStep === 3" [class.text-gray-500]="currentStep < 3">3</span>
+            </div>
+            <span class="ml-2 text-sm font-medium" [class.text-blue-600]="currentStep >= 3" [class.text-gray-500]="currentStep < 3">Personal Info</span>
+          </div>
+        </div>
+      </div>
+
+      <form [formGroup]="appointmentForm" (ngSubmit)="onSubmit()" class="space-y-6">
+        
+        <div *ngIf="currentStep === 1" class="space-y-6 form-step">
+          <div class="text-center py-8">
+            <div class="mb-4">
+              <svg class="mx-auto h-12 w-12 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-emerald-50 mb-2">Certificate Selected</h3>
+            <p class="text-gray-600 dark:text-emerald-200/70 mb-4">You have selected: <strong class="text-blue-600">{{ selectedForm.name }}</strong></p>
+            <p class="text-sm text-gray-500 dark:text-emerald-300/60 mb-6">Please proceed to select your preferred date and time for the appointment.</p>
+            <button type="button" (click)="nextStep()" class="btn-primary">
+              Continue to Date & Time Selection
+            </button>
+          </div>
+        </div>
+
+        <div *ngIf="currentStep === 2" class="space-y-6 form-step">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-emerald-50 mb-4">Select Date and Time</h3>
+          
+          <input type="hidden" formControlName="requestedDate">
+          <input type="hidden" formControlName="requestedYear">
+          <input type="hidden" formControlName="requestedMonth">
+          <input type="hidden" formControlName="requestedDay">
+          <input type="hidden" formControlName="requestedTime">
+
+          <div class="bg-gray-50 dark:bg-surface-dark border-2 border-gray-200 dark:border-emerald-900 rounded-lg p-4 mb-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm mb-4">
+              <div>
+                <span class="text-gray-600 dark:text-emerald-200/70 font-medium">Year:</span>
+                <span class="ml-2 text-gray-900 dark:text-emerald-50 font-semibold">{{ appointmentForm.get('requestedYear')?.value || 'Not selected' }}</span>
+              </div>
+              <div>
+                <span class="text-gray-600 dark:text-emerald-200/70 font-medium">Month:</span>
+                <span class="ml-2 text-gray-900 dark:text-emerald-50 font-semibold">{{ getSelectedMonthName() }}</span>
+              </div>
+              <div>
+                <span class="text-gray-600 dark:text-emerald-200/70 font-medium">Date:</span>
+                <span class="ml-2 text-gray-900 dark:text-emerald-50 font-semibold">{{ appointmentForm.get('requestedDay')?.value || 'Not selected' }}</span>
+              </div>
+              <div>
+                <span class="text-gray-600 dark:text-emerald-200/70 font-medium">Time:</span>
+                <span class="ml-2 text-gray-900 dark:text-emerald-50 font-semibold">{{ appointmentForm.get('requestedTime')?.value || 'Not selected' }}</span>
+              </div>
+            </div>
+            <div class="text-center">
+              <button 
+                type="button" 
+                (click)="activePopup = 'year'" 
+                class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all font-semibold"
+              >
+                {{ appointmentForm.get('requestedYear')?.value ? 'Change Selection' : 'Start Selection' }}
+              </button>
+            </div>
+          </div>
+
+          <div class="flex justify-between mt-6">
+            <button type="button" (click)="previousStep()" class="btn-outline">
+              Back
+            </button>
+            <button type="button" (click)="nextStep()" class="btn-primary">
+              Continue to Personal Information
+            </button>
+          </div>
+        </div>
+
+        <div *ngIf="currentStep === 3" class="space-y-6 form-step">
+          <h3 class="text-xl font-semibold text-gray-900 dark:text-emerald-50">Personal Information for Certificate</h3>
+
+          <div>
+            <label for="date" class="block text-sm font-medium text-gray-700 dark:text-emerald-100/80 mb-2">DATE of Request</label>
+            <input
+              id="date"
+              type="date"
+              formControlName="date"
+              class="input-field"
+              [class.border-red-500]="appointmentForm.get('date')?.invalid && appointmentForm.get('date')?.touched"
+            >
+            <div *ngIf="appointmentForm.get('date')?.invalid && appointmentForm.get('date')?.touched" class="mt-1 text-sm text-red-600">
+              Date is required.
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+              <label for="firstName" class="block text-sm font-medium text-gray-700 dark:text-emerald-100/80 mb-2">FIRST NAME</label>
+              <input
+                id="firstName"
+                type="text"
+                formControlName="firstName"
+                class="input-field"
+                placeholder="Enter first name"
+                [class.border-red-500]="appointmentForm.get('firstName')?.invalid && appointmentForm.get('firstName')?.touched"
+              >
+              <div *ngIf="appointmentForm.get('firstName')?.invalid && appointmentForm.get('firstName')?.touched" class="mt-1 text-sm text-red-600">
+                First Name is required.
+              </div>
+            </div>
+            <div>
+              <label for="middleName" class="block text-sm font-medium text-gray-700 dark:text-emerald-100/80 mb-2">MIDDLE NAME (Optional)</label>
+              <input
+                id="middleName"
+                type="text"
+                formControlName="middleName"
+                class="input-field"
+                placeholder="Enter middle name"
+              >
+            </div>
+            <div>
+              <label for="lastName" class="block text-sm font-medium text-gray-700 dark:text-emerald-100/80 mb-2">LAST NAME</label>
+              <input
+                id="lastName"
+                type="text"
+                formControlName="lastName"
+                class="input-field"
+                placeholder="Enter last name"
+                [class.border-red-500]="appointmentForm.get('lastName')?.invalid && appointmentForm.get('lastName')?.touched"
+              >
+              <div *ngIf="appointmentForm.get('lastName')?.invalid && appointmentForm.get('lastName')?.touched" class="mt-1 text-sm text-red-600">
+                Last Name is required.
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="md:col-span-2">
+              <label for="address" class="block text-sm font-medium text-gray-700 dark:text-emerald-100/80 mb-2">ADDRESS (House No./Street)</label>
+              <textarea
+                id="address"
+                formControlName="address"
+                rows="3"
+                class="input-field resize-none"
+                placeholder="Enter your house number and street name"
+                [class.border-red-500]="appointmentForm.get('address')?.invalid && appointmentForm.get('address')?.touched"
+              ></textarea>
+              <div *ngIf="appointmentForm.get('address')?.invalid && appointmentForm.get('address')?.touched" class="mt-1 text-sm text-red-600">
+                Address is required.
+              </div>
+            </div>
+            <div>
+              <label for="purok" class="block text-sm font-medium text-gray-700 dark:text-emerald-100/80 mb-2">PUROK</label>
+              <input
+                id="purok"
+                type="text"
+                formControlName="purok"
+                class="input-field"
+                placeholder="e.g., Purok 11"
+                [class.border-red-500]="appointmentForm.get('purok')?.invalid && appointmentForm.get('purok')?.touched"
+              >
+              <div *ngIf="appointmentForm.get('purok')?.invalid && appointmentForm.get('purok')?.touched" class="mt-1 text-sm text-red-600">
+                Purok is required.
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+              <label for="dateOfBirth" class="block text-sm font-medium text-gray-700 dark:text-emerald-100/80 mb-2">DATE OF BIRTH</label>
+              <input
+                id="dateOfBirth"
+                type="date"
+                formControlName="dateOfBirth"
+                class="input-field"
+                [class.border-red-500]="appointmentForm.get('dateOfBirth')?.invalid && appointmentForm.get('dateOfBirth')?.touched"
+              >
+              <div *ngIf="appointmentForm.get('dateOfBirth')?.invalid && appointmentForm.get('dateOfBirth')?.touched" class="mt-1 text-sm text-red-600">
+                Date of Birth is required.
+              </div>
+            </div>
+
+            <div>
+              <label for="gender" class="block text-sm font-medium text-gray-700 dark:text-emerald-100/80 mb-2">GENDER</label>
+              <select
+                id="gender"
+                formControlName="gender"
+                class="input-field"
+                [class.border-red-500]="appointmentForm.get('gender')?.invalid && appointmentForm.get('gender')?.touched"
+              >
+                <option value="" disabled selected>Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select>
+              <div *ngIf="appointmentForm.get('gender')?.invalid && appointmentForm.get('gender')?.touched" class="mt-1 text-sm text-red-600">
+                Gender is required.
+              </div>
+            </div>
+
+            <div>
+              <label for="civilStatus" class="block text-sm font-medium text-gray-700 dark:text-emerald-100/80 mb-2">CIVIL STATUS</label>
+              <select
+                id="civilStatus"
+                formControlName="civilStatus"
+                class="input-field"
+                [class.border-red-500]="appointmentForm.get('civilStatus')?.invalid && appointmentForm.get('civilStatus')?.touched"
+              >
+                <option value="" disabled selected>Select Status</option>
+                <option value="Single">Single</option>
+                <option value="Married">Married</option>
+                <option value="Widowed">Widowed</option>
+                <option value="Separated">Separated</option>
+              </select>
+              <div *ngIf="appointmentForm.get('civilStatus')?.invalid && appointmentForm.get('civilStatus')?.touched" class="mt-1 text-sm text-red-600">
+                Civil Status is required.
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label for="phoneNo" class="block text-sm font-medium text-gray-700 dark:text-emerald-100/80 mb-2">PHONE NO.</label>
+              <input
+                id="phoneNo"
+                type="tel"
+                formControlName="phoneNo"
+                class="input-field"
+                placeholder="e.g., 09xxxxxxxxx"
+                [class.border-red-500]="appointmentForm.get('phoneNo')?.invalid && appointmentForm.get('phoneNo')?.touched"
+              >
+              <div *ngIf="appointmentForm.get('phoneNo')?.invalid && appointmentForm.get('phoneNo')?.touched" class="mt-1 text-sm text-red-600">
+                Phone Number is required.
+              </div>
+            </div>
+
+            <div>
+              <label for="residentSince" class="block text-sm font-medium text-gray-700 dark:text-emerald-100/80 mb-2">RESIDENT SINCE WHEN (Year)</label>
+              <input
+                id="residentSince"
+                type="number"
+                formControlName="residentSince"
+                class="input-field"
+                placeholder="Enter year (e.g., 2010)"
+                [class.border-red-500]="appointmentForm.get('residentSince')?.invalid && appointmentForm.get('residentSince')?.touched"
+              >
+              <div *ngIf="appointmentForm.get('residentSince')?.invalid && appointmentForm.get('residentSince')?.touched" class="mt-1 text-sm text-red-600">
+                Resident Since is required.
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label for="purpose" class="block text-sm font-medium text-gray-700 dark:text-emerald-100/80 mb-2">PURPOSE</label>
+            <textarea
+              id="purpose"
+              formControlName="purpose"
+              rows="3"
+              class="input-field resize-none"
+              placeholder="Enter the purpose for this certificate"
+              [class.border-red-500]="appointmentForm.get('purpose')?.invalid && appointmentForm.get('purpose')?.touched"
+            ></textarea>
+            <div *ngIf="appointmentForm.get('purpose')?.invalid && appointmentForm.get('purpose')?.touched" class="mt-1 text-sm text-red-600">
+              Purpose is required.
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-emerald-100/80 mb-2">Additional Notes (Optional)</label>
+            <textarea
+              formControlName="notes"
+              rows="3"
+              class="input-field resize-none"
+              placeholder="Any additional information or special requests"
+            ></textarea>
+          </div>
+
+          <div class="flex justify-between space-x-4">
+            <button
+              type="button"
+              (click)="previousStep()"
+              class="btn-outline">
+              Back
+            </button>
+            <button
+              type="submit"
+              [disabled]="isSubmitting || appointmentForm.invalid || availableTimeSlots.length === 0"
+              class="btn-primary disabled:opacity-50 disabled:cursor-not-allowed">
+              <span *ngIf="!isSubmitting">Review Request</span>
+              <span *ngIf="isSubmitting" class="flex items-center">
+                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Processing...
+              </span>
+            </button>
+          </div>
+        </div>
+      </form> 
+    </div>
+  </div>
+
+  <div *ngIf="certificateForms.length === 0" class="text-center py-12">
+    <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-emerald-400/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+    </svg>
+    <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-emerald-50">No certificate forms available</h3>
+    <p class="mt-1 text-sm text-gray-500 dark:text-emerald-300/60">Please check back later for available certificate forms.</p>
+  </div>
+
+  <div *ngIf="activePopup === 'year'" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 modal-overlay" (click)="activePopup = null">
+    <div class="bg-white dark:bg-surface-dark-elevated rounded-xl shadow-2xl max-w-2xl w-full mx-4 p-6 modal-content" (click)="$event.stopPropagation()">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-emerald-50">Select Year</h2>
+        <button type="button" (click)="activePopup = null" class="text-gray-400 dark:text-emerald-400/50 hover:text-gray-600 text-2xl font-bold">&times;</button>
+      </div>
+      <div class="flex items-center justify-between mb-4">
+        <button 
+          type="button"
+          (click)="prevYearPage()"
+          [disabled]="currentYearPage === 0"
+          class="px-4 py-2 border-2 border-gray-300 dark:border-emerald-800 rounded-lg hover:bg-gray-50 hover:border-gray-400 disabled:opacity-30 disabled:cursor-not-allowed transition-all font-semibold"
+        >
+          ← Prev
+        </button>
+        <h3 class="text-xl font-bold text-gray-900 dark:text-emerald-50">
+          {{ yearCalendarPages[currentYearPage].startYear }} - {{ yearCalendarPages[currentYearPage].endYear }}
+        </h3>
+        <button 
+          type="button"
+          (click)="nextYearPage()"
+          [disabled]="currentYearPage >= yearCalendarPages.length - 1"
+          class="px-4 py-2 border-2 border-gray-300 dark:border-emerald-800 rounded-lg hover:bg-gray-50 hover:border-gray-400 disabled:opacity-30 disabled:cursor-not-allowed transition-all font-semibold"
+        >
+          Next →
+        </button>
+      </div>
+      <div class="grid grid-cols-5 gap-3">
+        <button
+          *ngFor="let year of yearCalendarPages[currentYearPage]?.years"
+          type="button"
+          (click)="selectYear(year)"
+          [class.bg-blue-600]="isYearSelected(year)"
+          [class.text-white]="isYearSelected(year)"
+          [class.bg-white]="!isYearSelected(year)"
+          [class.text-gray-900]="!isYearSelected(year)"
+          [class.border-blue-600]="isYearSelected(year)"
+          [class.border-2]="isYearSelected(year)"
+          [class.border-gray-300]="!isYearSelected(year)"
+          class="px-4 py-3 border rounded-lg hover:bg-blue-50 hover:border-blue-400 transition-all calendar-year-button"
+        >
+          <span class="calendar-year-number">{{ year }}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="activePopup === 'month'" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 modal-overlay" (click)="activePopup = 'year'">
+    <div class="bg-white dark:bg-surface-dark-elevated rounded-xl shadow-2xl max-w-2xl w-full mx-4 p-6 modal-content" (click)="$event.stopPropagation()">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-emerald-50">Select Month</h2>
+        <button type="button" (click)="activePopup = 'year'" class="text-gray-400 dark:text-emerald-400/50 hover:text-gray-600 text-2xl font-bold">&times;</button>
+      </div>
+      <div class="grid grid-cols-4 gap-3">
+        <ng-container *ngFor="let monthRow of monthCalendarGrid">
+          <button
+            *ngFor="let month of monthRow"
+            type="button"
+            (click)="selectMonth(month.value)"
+            [disabled]="appointmentForm.get('requestedMonth')?.disabled"
+            [class.bg-blue-600]="isMonthSelected(month.value)"
+            [class.text-white]="isMonthSelected(month.value)"
+            [class.bg-white]="!isMonthSelected(month.value)"
+            [class.text-gray-900]="!isMonthSelected(month.value)"
+            [class.border-blue-600]="isMonthSelected(month.value)"
+            [class.border-2]="isMonthSelected(month.value)"
+            [class.border-gray-300]="!isMonthSelected(month.value)"
+            [class.opacity-50]="appointmentForm.get('requestedMonth')?.disabled"
+            class="px-4 py-3 border rounded-lg hover:bg-blue-50 hover:border-blue-400 transition-all text-sm font-semibold calendar-month-button"
+          >
+            {{ month.name }}
+          </button>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="activePopup === 'date' && calendarYear && calendarMonth" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 modal-overlay" (click)="activePopup = 'month'">
+    <div class="bg-white dark:bg-surface-dark-elevated rounded-xl shadow-2xl max-w-2xl w-full mx-4 p-6 modal-content" (click)="$event.stopPropagation()">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-emerald-50">Select Date</h2>
+        <button type="button" (click)="activePopup = 'month'" class="text-gray-400 dark:text-emerald-400/50 hover:text-gray-600 text-2xl font-bold">&times;</button>
+      </div>
+      <div class="text-center mb-5">
+        <h3 class="text-2xl font-bold text-gray-900 dark:text-emerald-50">{{ calendarMonthName }} {{ calendarYear }}</h3>
+      </div>
+      
+      <div class="grid grid-cols-7 gap-2 mb-3">
+        <div *ngFor="let weekday of weekDays" class="text-center text-sm font-bold text-gray-700 dark:text-emerald-100/80 py-2">
+          {{ weekday }}
+        </div>
+      </div>
+      
+      <div class="grid grid-cols-7 gap-2">
+        <button
+          *ngFor="let dayData of calendarDays; let i = index"
+          type="button"
+          (click)="selectCalendarDate(dayData)"
+          [disabled]="!isDateAvailable(dayData)"
+          [class.bg-blue-600]="isDateSelected(dayData)"
+          [class.text-white]="isDateSelected(dayData)"
+          [class.bg-white]="!isDateSelected(dayData)"
+          [class.text-gray-900]="dayData.isCurrentMonth && dayData.isAvailable && !isDateSelected(dayData)"
+          [class.text-gray-400]="!dayData.isCurrentMonth || !dayData.isAvailable"
+          [class.cursor-pointer]="isDateAvailable(dayData)"
+          [class.cursor-not-allowed]="!isDateAvailable(dayData)"
+          [class.hover:bg-blue-50]="isDateAvailable(dayData) && !isDateSelected(dayData)"
+          [class.border-blue-600]="isDateSelected(dayData)"
+          [class.border-2]="isDateSelected(dayData)"
+          [class.border-gray-300]="!isDateSelected(dayData)"
+          class="aspect-square border rounded-lg transition-all calendar-day"
+          [class.calendar-day-selected]="isDateSelected(dayData)"
+        >
+          <span *ngIf="dayData.day !== null && dayData.day !== undefined" class="calendar-day-number">{{ dayData.day }}</span>
+        </button>
+      </div>
+      
+      <div *ngIf="days.length === 0 && appointmentForm.get('requestedMonth')?.value && appointmentForm.get('requestedYear')?.value" class="mt-3 text-sm text-emerald-600 dark:text-emerald-300 text-center">
+        No available dates for this month
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="activePopup === 'time' && appointmentForm.get('requestedDate')?.value" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 modal-overlay" (click)="activePopup = 'date'">
+    <div class="bg-white dark:bg-surface-dark-elevated rounded-xl shadow-2xl max-w-3xl w-full mx-4 p-6 modal-content" (click)="$event.stopPropagation()">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-emerald-50">Select Start Time</h2>
+        <button type="button" (click)="activePopup = 'date'" class="text-gray-400 dark:text-emerald-400/50 hover:text-gray-600 text-2xl font-bold">&times;</button>
+      </div>
+      <div *ngIf="availableTimeSlots.length === 0" class="mb-3 text-sm text-emerald-600 dark:text-emerald-300 text-center">
+        No available time slots for this date
+      </div>
+      <div *ngIf="availableTimeSlots.length > 0" class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+        <button
+          *ngFor="let time of availableTimeSlots"
+          type="button"
+          (click)="selectTime(time)"
+          [class.bg-blue-600]="appointmentForm.get('requestedTime')?.value === time"
+          [class.text-white]="appointmentForm.get('requestedTime')?.value === time"
+          [class.bg-white]="appointmentForm.get('requestedTime')?.value !== time"
+          [class.text-gray-900]="appointmentForm.get('requestedTime')?.value !== time"
+          [class.border-blue-600]="appointmentForm.get('requestedTime')?.value === time"
+          [class.border-2]="appointmentForm.get('requestedTime')?.value === time"
+          [class.border-gray-300]="appointmentForm.get('requestedTime')?.value !== time"
+          [class.shadow-md]="appointmentForm.get('requestedTime')?.value === time"
+          class="px-4 py-3 border rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-all text-sm font-semibold time-slot-button"
+          [class.time-slot-button-selected]="appointmentForm.get('requestedTime')?.value === time"
+        >
+          {{ time }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="showPreview" class="fixed inset-0 z-50 flex items-center justify-center bg-black/55 p-3 modal-overlay" (click)="closePreview()">
+    <div class="request-modal" (click)="$event.stopPropagation()">
+
+      <div class="request-modal-header no-print">
+        <div>
+          <h2 class="text-xl font-bold text-slate-900 dark:text-emerald-50">Review Your Request</h2>
+          <p class="text-sm text-slate-500 dark:text-emerald-300/60 mt-0.5">Please ensure all details are correct before submitting.</p>
+        </div>
+        <button type="button" (click)="closePreview()" class="text-slate-400 hover:text-slate-600 dark:text-emerald-400/50 p-1" aria-label="Close">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+
+      <div class="request-modal-body custom-scrollbar">
+
+        <div class="request-summary-bar no-print">
+          <div>
+            <div class="label">Certificate Type</div>
+            <div class="value">{{ previewData?.certificateType }}</div>
+          </div>
+          <div>
+            <div class="label">Schedule</div>
+            <div class="value">{{ previewData?.appointmentDate | date:'mediumDate' }} at {{ previewData?.appointmentTime }}</div>
+          </div>
+        </div>
+
+        <h3 class="request-section-title no-print">Personal Information</h3>
+        <div class="request-info-grid no-print">
+          <div>
+            <div class="label">Full Name</div>
+            <div class="value">{{ previewFullName }}</div>
+          </div>
+          <div>
+            <div class="label">Phone Number</div>
+            <div class="value">{{ previewData?.phoneNo }}</div>
+          </div>
+          <div>
+            <div class="label">Date of Birth</div>
+            <div class="value">{{ previewData?.dateOfBirth | date:'mediumDate' }}</div>
+          </div>
+          <div>
+            <div class="label">Gender / Status</div>
+            <div class="value">{{ previewData?.gender }} / {{ previewData?.civilStatus }}</div>
+          </div>
+          <div style="grid-column: 1 / -1">
+            <div class="label">Address</div>
+            <div class="value">{{ previewAddress }}</div>
+          </div>
+          <div>
+            <div class="label">Resident Since</div>
+            <div class="value">{{ previewData?.residentSince }}</div>
+          </div>
+        </div>
+
+        <h3 class="request-section-title no-print">Purpose</h3>
+        <div class="request-purpose-box no-print">"{{ previewData?.purpose }}"</div>
+        <div *ngIf="previewData?.notes" class="no-print mb-4">
+          <div class="text-xs text-slate-500 mb-1">Additional Notes</div>
+          <p class="text-sm text-slate-700 dark:text-emerald-100/80">{{ previewData?.notes }}</p>
+        </div>
+
+        <div class="flex items-center justify-between gap-2 no-print mb-2">
+          <h3 class="request-section-title mb-0 border-0 pb-0">Request Summary Sheet</h3>
+          <div class="flex gap-2">
+            <button type="button" (click)="printRequestSheet()" class="px-3 py-1.5 text-xs font-semibold rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-100 dark:border-emerald-800 dark:text-emerald-100">Print</button>
+            <button type="button" (click)="downloadRequestSheetPdf()" [disabled]="isDownloadingSheet" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 disabled:opacity-60">
+              {{ isDownloadingSheet ? 'Preparing…' : 'Download PDF' }}
+            </button>
+          </div>
+        </div>
+
+        <div class="request-sheet-stage">
+          <article id="resident-request-sheet" class="request-sheet">
+            <header class="rs-header">
+              <div class="rs-republic">Republic of the Philippines</div>
+              <div class="rs-city">Province of Zambales</div>
+              <div class="rs-city">City of Olongapo</div>
+              <div class="rs-brgy">Barangay Old Cabalan</div>
+              <div class="rs-office">Office of the Punong Barangay</div>
+              <div class="rs-tricolor"></div>
+            </header>
+
+            <h1 class="rs-title">Resident Request Summary</h1>
+
+            <div class="rs-fields">
+              <div class="rs-field">
+                <span class="rs-field-label">Name</span>
+                <span class="rs-field-value">{{ previewFullName }}</span>
+              </div>
+              <div class="rs-field">
+                <span class="rs-field-label">Address</span>
+                <span class="rs-field-value">{{ previewAddress }}</span>
+              </div>
+            </div>
+
+            <div class="rs-salutation">TO WHOM IT MAY CONCERN:</div>
+
+            <div class="rs-body">
+              <p>
+                This is to certify that the above-named person has filed a request for a
+                <strong>{{ previewData?.certificateType }}</strong> with the Office of the Punong Barangay,
+                Barangay Old Cabalan, City of Olongapo, Province of Zambales.
+              </p>
+              <p>
+                This request summary is issued for review and record purposes prior to processing
+                of the said certification for whatever legal purpose it may serve.
+              </p>
+
+              <div class="rs-meta-grid">
+                <div>
+                  <div class="k">Certificate Type</div>
+                  <div class="v">{{ previewData?.certificateType }}</div>
+                </div>
+                <div>
+                  <div class="k">Schedule</div>
+                  <div class="v">{{ previewData?.appointmentDate | date:'mediumDate' }} · {{ previewData?.appointmentTime }}</div>
+                </div>
+                <div>
+                  <div class="k">Date of Birth</div>
+                  <div class="v">{{ previewData?.dateOfBirth | date:'mediumDate' }}</div>
+                </div>
+                <div>
+                  <div class="k">Gender / Civil Status</div>
+                  <div class="v">{{ previewData?.gender }} / {{ previewData?.civilStatus }}</div>
+                </div>
+                <div>
+                  <div class="k">Phone</div>
+                  <div class="v">{{ previewData?.phoneNo }}</div>
+                </div>
+                <div>
+                  <div class="k">Resident Since</div>
+                  <div class="v">{{ previewData?.residentSince }}</div>
+                </div>
+                <div style="grid-column: 1 / -1">
+                  <div class="k">Purpose</div>
+                  <div class="v">{{ previewData?.purpose }}</div>
+                </div>
+                <div *ngIf="previewData?.notes" style="grid-column: 1 / -1">
+                  <div class="k">Notes</div>
+                  <div class="v">{{ previewData?.notes }}</div>
+                </div>
+              </div>
+
+              <p class="rs-issued no-indent">
+                ISSUED this <strong>{{ requestIssueDayOrdinal }}</strong> day of
+                <strong>{{ requestIssueMonthYear }}</strong> at the Barangay Hall of Old Cabalan, Olongapo City.
+              </p>
+            </div>
+
+            <div class="rs-sign">
+              <div class="rs-sign-line"></div>
+              <div class="rs-sign-name">HON. RONALDO A. ALBA JR</div>
+              <div class="rs-sign-role">Punong Barangay</div>
+            </div>
+
+            <footer class="rs-footer">
+              <span>Not valid without official dry seal.</span>
+              <span>Status: {{ previewData?.status || 'Pending' }}</span>
+            </footer>
+          </article>
+        </div>
+      </div>
+
+      <div class="request-modal-footer no-print">
+        <button type="button" (click)="closePreview()"
+          class="px-5 py-2.5 rounded-lg text-slate-700 dark:text-emerald-100 font-medium hover:bg-slate-100 dark:hover:bg-emerald-950/40">
+          Edit Details
+        </button>
+        <button type="button" (click)="confirmSubmission()" [disabled]="isSubmitting"
+          class="px-5 py-2.5 rounded-lg bg-emerald-600 text-white font-semibold hover:bg-emerald-700 shadow-md shadow-emerald-200/60 disabled:opacity-60 flex items-center">
+          <span *ngIf="!isSubmitting">Confirm &amp; Submit</span>
+          <span *ngIf="isSubmitting" class="flex items-center">
+            <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Processing...
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>

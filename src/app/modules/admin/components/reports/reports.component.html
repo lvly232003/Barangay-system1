@@ -1,0 +1,101 @@
+<div class="p-6 page-shell min-h-full">
+  <div class="mb-8 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
+    <div>
+      <h1 class="text-3xl font-bold text-gray-900 dark:text-emerald-50">Reports</h1>
+      <p class="text-gray-600 dark:text-emerald-200/70 mt-2">
+        Animated analytics for citizens, documents, fees, and certificate coverage.
+      </p>
+      <p *ngIf="lastGeneratedAt" class="text-xs muted-text mt-1">
+        Last refreshed: {{ lastGeneratedAt | date:'medium' }}
+      </p>
+    </div>
+    <div class="flex flex-wrap gap-2">
+      <button
+        type="button"
+        class="btn-outline text-sm"
+        (click)="exportPdf()"
+        [disabled]="loading || exporting"
+      >
+        {{ exporting === 'pdf' ? 'Exporting PDF…' : 'Export PDF' }}
+      </button>
+      <button
+        type="button"
+        class="btn-primary text-sm"
+        (click)="exportExcel()"
+        [disabled]="loading || exporting"
+      >
+        {{ exporting === 'excel' ? 'Exporting Excel…' : 'Export Excel' }}
+      </button>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4 mb-8">
+    <div class="card py-4">
+      <p class="text-xs muted-text">Citizens</p>
+      <p class="text-2xl font-bold text-emerald-700 dark:text-emerald-300">{{ summary.citizens }}</p>
+    </div>
+    <div class="card py-4">
+      <p class="text-xs muted-text">Staff / Admin</p>
+      <p class="text-2xl font-bold text-teal-700 dark:text-teal-300">{{ summary.staff }}</p>
+    </div>
+    <div class="card py-4">
+      <p class="text-xs muted-text">Appointments</p>
+      <p class="text-2xl font-bold text-amber-600 dark:text-amber-300">{{ summary.appointments }}</p>
+    </div>
+    <div class="card py-4">
+      <p class="text-xs muted-text">Certificates</p>
+      <p class="text-2xl font-bold text-cyan-700 dark:text-cyan-300">{{ summary.certificates }}</p>
+    </div>
+    <div class="card py-4">
+      <p class="text-xs muted-text">Formats</p>
+      <p class="text-2xl font-bold text-violet-700 dark:text-violet-300">{{ summary.forms }}</p>
+    </div>
+    <div class="card py-4">
+      <p class="text-xs muted-text">Court bookings</p>
+      <p class="text-2xl font-bold text-rose-600 dark:text-rose-300">{{ summary.reservations }}</p>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <div class="card">
+      <h3 class="text-lg font-semibold text-gray-900 dark:text-emerald-50 mb-2">Citizen Reports</h3>
+      <p class="text-sm muted-text mb-4">Demographics and service volume trends</p>
+      <button type="button" (click)="generateReport('citizen')" class="btn-primary" [disabled]="loading">
+        Refresh Citizen Chart
+      </button>
+    </div>
+    <div class="card">
+      <h3 class="text-lg font-semibold text-gray-900 dark:text-emerald-50 mb-2">Document Reports</h3>
+      <p class="text-sm muted-text mb-4">Processing mix across certificate types</p>
+      <button type="button" (click)="generateReport('document')" class="btn-primary" [disabled]="loading">
+        Refresh Document Chart
+      </button>
+    </div>
+    <div class="card">
+      <h3 class="text-lg font-semibold text-gray-900 dark:text-emerald-50 mb-2">Financial Reports</h3>
+      <p class="text-sm muted-text mb-4">Fee schedule and projected collections (₱{{ summary.estimatedFees | number }})</p>
+      <button type="button" (click)="generateReport('financial')" class="btn-primary" [disabled]="loading">
+        Refresh Financial Chart
+      </button>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-6">
+    <div class="card overflow-hidden">
+      <div #citizenChart></div>
+    </div>
+    <div class="card overflow-hidden">
+      <div #documentChart></div>
+    </div>
+    <div class="card overflow-hidden">
+      <div #financialChart></div>
+    </div>
+    <div class="card overflow-hidden">
+      <div #coverageChart></div>
+    </div>
+  </div>
+
+  <div class="card overflow-hidden">
+    <div #heatmapChart></div>
+  </div>
+</div>

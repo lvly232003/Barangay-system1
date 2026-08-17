@@ -1,0 +1,227 @@
+<div class="h-full overflow-y-auto">
+  <div class="p-6">
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-gray-900 dark:text-emerald-50">User Management</h1>
+      <p class="text-gray-600 dark:text-emerald-200/70 mt-2">Manage staff members and track all system users</p>
+    </div>
+
+    <!-- Add User Button -->
+    <div class="mb-6">
+      <button 
+        (click)="toggleAddForm()" 
+        class="btn-primary">
+        <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+        </svg>
+        {{ editingUser ? 'Cancel Edit' : '+ Add Staff Member' }}
+      </button>
+    </div>
+
+    <!-- Add User Form -->
+    <div *ngIf="showAddForm" class="card mb-8">
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-emerald-50 mb-6">
+        {{ editingUser ? 'Edit User' : 'Add New Staff Member' }}
+      </h2>
+      
+      <form [formGroup]="addUserForm" (ngSubmit)="editingUser ? updateUser() : onSubmit()" class="space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-emerald-100/80 mb-2">First Name</label>
+            <input
+              type="text"
+              formControlName="firstName"
+              class="input-field"
+              [class.border-red-500]="addUserForm.get('firstName')?.invalid && addUserForm.get('firstName')?.touched"
+              placeholder="Enter first name"
+            />
+            <div *ngIf="addUserForm.get('firstName')?.invalid && addUserForm.get('firstName')?.touched" class="mt-1 text-sm text-red-600">
+              <span *ngIf="addUserForm.get('firstName')?.errors?.['required']">First name is required</span>
+              <span *ngIf="addUserForm.get('firstName')?.errors?.['minlength']">First name must be at least 2 characters</span>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-emerald-100/80 mb-2">Last Name</label>
+            <input
+              type="text"
+              formControlName="lastName"
+              class="input-field"
+              [class.border-red-500]="addUserForm.get('lastName')?.invalid && addUserForm.get('lastName')?.touched"
+              placeholder="Enter last name"
+            />
+            <div *ngIf="addUserForm.get('lastName')?.invalid && addUserForm.get('lastName')?.touched" class="mt-1 text-sm text-red-600">
+              <span *ngIf="addUserForm.get('lastName')?.errors?.['required']">Last name is required</span>
+              <span *ngIf="addUserForm.get('lastName')?.errors?.['minlength']">Last name must be at least 2 characters</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-emerald-100/80 mb-2">Email</label>
+            <input
+              type="email"
+              formControlName="email"
+              class="input-field"
+              [class.border-red-500]="addUserForm.get('email')?.invalid && addUserForm.get('email')?.touched"
+              placeholder="Enter email address"
+            />
+            <div *ngIf="addUserForm.get('email')?.invalid && addUserForm.get('email')?.touched" class="mt-1 text-sm text-red-600">
+              <span *ngIf="addUserForm.get('email')?.errors?.['required']">Email is required</span>
+              <span *ngIf="addUserForm.get('email')?.errors?.['email']">Please enter a valid email</span>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-emerald-100/80 mb-2">Phone</label>
+            <input
+              type="tel"
+              formControlName="phone"
+              class="input-field"
+              [class.border-red-500]="addUserForm.get('phone')?.invalid && addUserForm.get('phone')?.touched"
+              placeholder="Enter phone number"
+            />
+            <div *ngIf="addUserForm.get('phone')?.invalid && addUserForm.get('phone')?.touched" class="mt-1 text-sm text-red-600">
+              <span *ngIf="addUserForm.get('phone')?.errors?.['required']">Phone number is required</span>
+              <span *ngIf="addUserForm.get('phone')?.errors?.['pattern']">Please enter a valid phone number</span>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-emerald-100/80 mb-2">Address</label>
+          <textarea
+            formControlName="address"
+            rows="3"
+            class="input-field resize-none"
+            [class.border-red-500]="addUserForm.get('address')?.invalid && addUserForm.get('address')?.touched"
+            placeholder="Enter complete address"
+          ></textarea>
+          <div *ngIf="addUserForm.get('address')?.invalid && addUserForm.get('address')?.touched" class="mt-1 text-sm text-red-600">
+            <span *ngIf="addUserForm.get('address')?.errors?.['required']">Address is required</span>
+            <span *ngIf="addUserForm.get('address')?.errors?.['minlength']">Address must be at least 10 characters</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-emerald-100/80 mb-2">Password</label>
+            <input
+              type="password"
+              formControlName="password"
+              class="input-field"
+              [class.border-red-500]="addUserForm.get('password')?.invalid && addUserForm.get('password')?.touched"
+              placeholder="Enter password"
+            />
+            <div *ngIf="addUserForm.get('password')?.invalid && addUserForm.get('password')?.touched" class="mt-1 text-sm text-red-600">
+              <span *ngIf="addUserForm.get('password')?.errors?.['required']">Password is required</span>
+              <span *ngIf="addUserForm.get('password')?.errors?.['minlength']">Password must be at least 6 characters</span>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-emerald-100/80 mb-2">Role</label>
+            <select
+              formControlName="role"
+              class="input-field"
+              [class.border-red-500]="addUserForm.get('role')?.invalid && addUserForm.get('role')?.touched"
+            >
+              <option value="staff">Staff Member</option>
+              <option value="admin">Administrator</option>
+              <option value="user">Resident</option>
+            </select>
+            <div *ngIf="addUserForm.get('role')?.invalid && addUserForm.get('role')?.touched" class="mt-1 text-sm text-red-600">
+              Please select a role
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-end space-x-4">
+          <button
+            type="button"
+            (click)="cancelEdit()"
+            class="btn-outline">
+            Cancel
+          </button>
+          <button
+            type="submit"
+            [disabled]="isAddingUser"
+            class="btn-primary disabled:opacity-50 disabled:cursor-not-allowed">
+            <span *ngIf="!isAddingUser">{{ editingUser ? 'Update User' : 'Add User' }}</span>
+            <span *ngIf="isAddingUser" class="flex items-center">
+              <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              {{ editingUser ? 'Updating...' : 'Adding...' }}
+            </span>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Users Table -->
+    <div class="card">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-xl font-semibold text-gray-900 dark:text-emerald-50">System Users</h2>
+        <div class="text-sm text-gray-500 dark:text-emerald-300/60">
+          Total Users: {{ users.length }}
+        </div>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200 dark:divide-emerald-900">
+          <thead class="bg-gray-50 dark:bg-surface-dark">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-emerald-300/60 uppercase tracking-wider">NAME</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-emerald-300/60 uppercase tracking-wider">EMAIL</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-emerald-300/60 uppercase tracking-wider">PHONE</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-emerald-300/60 uppercase tracking-wider">ROLE</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-emerald-300/60 uppercase tracking-wider">ADDRESS</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-emerald-300/60 uppercase tracking-wider">ACTIONS</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white dark:bg-surface-dark-elevated divide-y divide-gray-200 dark:divide-emerald-900">
+            <tr *ngFor="let user of users">
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-emerald-50">
+                {{ user.firstName }} {{ user.lastName }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-emerald-300/60">{{ user.email }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-emerald-300/60">{{ user.phone || 'N/A' }}</td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span [class]="getRoleBadgeClass(user.role)" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full">
+                  {{ getRoleDisplayName(user.role) }}
+                </span>
+              </td>
+              <td class="px-6 py-4 text-sm text-gray-500 dark:text-emerald-300/60 max-w-xs truncate">
+                {{ user.address || 'N/A' }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                <button 
+                  (click)="editUser(user)" 
+                  class="text-primary-600 hover:text-primary-900 mr-3">
+                  Edit
+                </button>
+                <button 
+                  (click)="deleteUser(user)" 
+                  class="text-red-600 hover:text-red-900"
+                  [disabled]="isLastAdmin(user)">
+                  Delete
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="users.length === 0" class="text-center py-12">
+        <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-emerald-400/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+        </svg>
+        <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-emerald-50">No users found</h3>
+        <p class="mt-1 text-sm text-gray-500 dark:text-emerald-300/60">Get started by adding a new staff member.</p>
+      </div>
+    </div>
+  </div>
+</div>

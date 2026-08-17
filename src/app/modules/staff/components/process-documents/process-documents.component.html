@@ -1,0 +1,103 @@
+<div class="p-6">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-emerald-50">Process Documents</h1>
+    <p class="text-gray-600 dark:text-emerald-200/70 mt-2">
+      Review and process certificate requests from Supabase (<code class="text-xs">appointments</code> / <code class="text-xs">certificates</code>).
+    </p>
+  </div>
+
+  <div class="mb-6 flex flex-wrap gap-2">
+    <button type="button" (click)="setStatusFilter('all')" [class]="!statusFilter ? 'btn-primary' : 'btn-outline'">All</button>
+    <button type="button" (click)="setStatusFilter('pending')" [class]="statusFilter === 'pending' ? 'btn-primary' : 'btn-outline'">Pending</button>
+    <button type="button" (click)="setStatusFilter('approved')" [class]="statusFilter === 'approved' ? 'btn-primary' : 'btn-outline'">Approved</button>
+    <button type="button" (click)="setStatusFilter('completed')" [class]="statusFilter === 'completed' ? 'btn-primary' : 'btn-outline'">Completed</button>
+    <button type="button" (click)="setStatusFilter('rejected')" [class]="statusFilter === 'rejected' ? 'btn-primary' : 'btn-outline'">Rejected</button>
+  </div>
+
+  <div class="card">
+    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-emerald-50">Document Requests</h2>
+      <div class="flex flex-wrap gap-2 items-center">
+        <input
+          type="search"
+          class="input-field max-w-xs"
+          placeholder="Search resident or certificate"
+          [(ngModel)]="searchTerm"
+          (ngModelChange)="filterRequests()" />
+        <button type="button" class="btn-primary" (click)="loadData()" [disabled]="loading">
+          {{ loading ? 'Loading…' : 'Refresh' }}
+        </button>
+      </div>
+    </div>
+
+    <p *ngIf="error" class="mb-4 text-sm text-rose-600 dark:text-rose-300">{{ error }}</p>
+
+    <div *ngIf="loading" class="text-center py-10 muted-text">Loading from Supabase…</div>
+
+    <div *ngIf="!loading" class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200 dark:divide-emerald-900">
+        <thead class="bg-gray-50 dark:bg-surface-dark">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-emerald-300/60 uppercase tracking-wider">Document Type</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-emerald-300/60 uppercase tracking-wider">Requester</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-emerald-300/60 uppercase tracking-wider">Date</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-emerald-300/60 uppercase tracking-wider">Status</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-emerald-300/60 uppercase tracking-wider">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white dark:bg-surface-dark-elevated divide-y divide-gray-200 dark:divide-emerald-900">
+          <tr *ngFor="let request of filteredRequests">
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-emerald-50">
+              {{ request.certificateName || request.certificateType }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-emerald-300/60">
+              <div>{{ request.userName }}</div>
+              <div class="text-xs">{{ request.userEmail }}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-emerald-300/60">
+              {{ formatDateTime(request.appointmentDate || request.requestedDate, request.appointmentTime || request.requestedTime) }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <span [class]="getStatusBadgeClass(request.status)" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full">
+                {{ request.status | titlecase }}
+              </span>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+              <button
+                *ngIf="request.status === 'pending'"
+                type="button"
+                (click)="updateAppointmentStatus(request.id, 'approved')"
+                class="text-green-600 hover:text-green-800 dark:text-green-400">
+                Approve
+              </button>
+              <button
+                *ngIf="request.status === 'pending'"
+                type="button"
+                (click)="updateAppointmentStatus(request.id, 'rejected')"
+                class="text-red-600 hover:text-red-800 dark:text-red-400">
+                Reject
+              </button>
+              <button
+                *ngIf="request.status === 'approved'"
+                type="button"
+                (click)="updateAppointmentStatus(request.id, 'completed')"
+                class="text-emerald-700 hover:text-emerald-900 dark:text-emerald-300">
+                Mark completed
+              </button>
+              <button
+                *ngIf="canShowCertificate(request)"
+                type="button"
+                (click)="showCertificateForRequest(request)"
+                class="text-primary-600 hover:text-primary-800 dark:text-emerald-300">
+                View
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="filteredRequests.length === 0">
+            <td colspan="5" class="px-6 py-10 text-center muted-text">No document requests found in Supabase.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

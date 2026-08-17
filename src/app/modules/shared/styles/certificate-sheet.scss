@@ -1,0 +1,536 @@
+/* Classic barangay certificate letterhead — left rail + QR (Scan me!) — 1× A4 */
+
+.cert-preview-page {
+  min-height: 100vh;
+  background: #eef2ff;
+  padding-bottom: 1.5rem;
+}
+
+html.dark .cert-preview-page {
+  background: #0b1220;
+}
+
+.cert-toolbar {
+  background: #fff;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+html.dark .cert-toolbar {
+  background: #0f1f19;
+  border-bottom-color: #1f3d32;
+}
+
+.cert-stage {
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.cert-sheet {
+  --ink: #1e293b;
+  --muted: #64748b;
+  --accent: #6d28d9;
+  --accent-dark: #5b21b6;
+  --accent-soft: #f5f3ff;
+  --accent-border: #c4b5fd;
+  --header-from: #7c3aed;
+  --header-to: #5b21b6;
+  --rail: #15803d;
+  --rail-soft: #f0fdf4;
+  --scan: #2563eb;
+
+  box-sizing: border-box;
+  width: 210mm;
+  max-width: min(100%, 794px);
+  height: 297mm;
+  max-height: 1123px;
+  overflow: hidden;
+  margin: 0 auto;
+  padding: 0;
+  background: #fff;
+  color: var(--ink);
+  color-scheme: light;
+  border: 1px solid #cbd5e1;
+  box-shadow: 0 12px 32px rgb(91 33 182 / 0.16);
+  display: flex;
+  flex-direction: column;
+  font-family: 'Source Sans 3', 'Segoe UI', Georgia, serif;
+  position: relative;
+}
+
+.cert-sheet--theme-indigency {
+  --accent: #047857;
+  --accent-dark: #065f46;
+  --accent-soft: #ecfdf5;
+  --accent-border: #6ee7b7;
+  --header-from: #059669;
+  --header-to: #065f46;
+  --rail: #047857;
+  --scan: #0d9488;
+}
+
+.cert-sheet--theme-business {
+  --accent: #1d4ed8;
+  --accent-dark: #1e40af;
+  --accent-soft: #eff6ff;
+  --accent-border: #93c5fd;
+  --header-from: #2563eb;
+  --header-to: #1e3a8a;
+  --rail: #1d4ed8;
+  --scan: #2563eb;
+}
+
+.cert-sheet--export {
+  width: 794px !important;
+  height: 1123px !important;
+  max-width: 794px !important;
+  max-height: 1123px !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+.cert-sheet * {
+  box-sizing: border-box;
+}
+
+/* Full-width official header */
+.cert-band {
+  background: linear-gradient(90deg, var(--header-from), var(--header-to));
+  color: #fff;
+  padding: 8px 14px 10px;
+  flex-shrink: 0;
+}
+
+.cert-band-top {
+  display: flex;
+  justify-content: space-between;
+  font-size: 8.5px;
+  opacity: 0.95;
+  margin-bottom: 6px;
+  line-height: 1.25;
+}
+
+.cert-band-main {
+  display: grid;
+  grid-template-columns: 58px 1fr 58px;
+  gap: 8px;
+  align-items: center;
+}
+
+.cert-seal {
+  width: 56px;
+  height: 56px;
+  border-radius: 9999px;
+  border: 2.5px solid #fde047;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 5.5px;
+  font-weight: 800;
+  line-height: 1.1;
+  color: #fff;
+  background: radial-gradient(circle at 30% 30%, #fca5a5, #b91c1c 60%, #7f1d1d);
+}
+
+.cert-seal--brgy {
+  border-color: #fff;
+  background: rgb(255 255 255 / 0.18);
+  font-size: 6px;
+}
+
+.cert-gov {
+  text-align: center;
+}
+
+.cert-gov-republic {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.cert-gov-line {
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.cert-gov-barangay {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.cert-gov-office {
+  margin-top: 2px;
+  font-size: 9px;
+  font-style: italic;
+  opacity: 0.95;
+}
+
+/* Letterhead body: green left rail + main */
+.cert-letter {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 132px 1fr;
+  overflow: hidden;
+}
+
+.cert-sidebar {
+  background: var(--rail-soft);
+  border-right: 3px solid var(--rail);
+  padding: 10px 8px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 7.5px;
+  line-height: 1.3;
+  color: var(--ink);
+}
+
+.cert-side-item {
+  display: grid;
+  grid-template-columns: 14px 1fr;
+  gap: 5px;
+  align-items: start;
+}
+
+.cert-side-icon {
+  width: 14px;
+  height: 14px;
+  border-radius: 9999px;
+  background: var(--rail);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8px;
+  font-weight: 800;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.cert-side-label {
+  font-size: 7px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--rail);
+}
+
+.cert-qr-block {
+  margin-top: auto;
+  text-align: center;
+  padding-top: 6px;
+}
+
+.cert-qr-caption {
+  font-size: 8px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 5px;
+}
+
+.cert-qr-frame {
+  width: 92px;
+  height: 92px;
+  margin: 0 auto;
+  padding: 4px;
+  background: #fff;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cert-qr-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.cert-scan-me {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 3px 10px;
+  background: var(--scan);
+  color: #fff;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  border-radius: 3px;
+  text-transform: none;
+}
+
+.cert-year {
+  margin-top: 8px;
+  text-align: center;
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  color: var(--scan);
+  line-height: 1;
+  opacity: 0.9;
+}
+
+.cert-main {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 12px 8px;
+  overflow: hidden;
+}
+
+.cert-title-block {
+  text-align: center;
+  flex-shrink: 0;
+  margin-bottom: 6px;
+}
+
+.cert-office {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--ink);
+  text-transform: uppercase;
+}
+
+.cert-title {
+  margin: 3px 0 2px;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1.1;
+}
+
+.cert-subtitle {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #475569;
+  text-transform: uppercase;
+}
+
+.cert-rule {
+  width: 80px;
+  height: 2.5px;
+  margin: 5px auto 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--rail), var(--accent));
+}
+
+.cert-meta {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  padding: 6px 8px;
+  background: var(--accent-soft);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 5px 5px 0;
+  margin-bottom: 8px;
+  flex-shrink: 0;
+}
+
+.cert-meta--2 {
+  grid-template-columns: 1fr 1fr;
+}
+
+.cert-meta-label {
+  font-size: 8px;
+  font-weight: 700;
+  color: var(--accent-dark);
+}
+
+.cert-meta-value {
+  margin-top: 1px;
+  font-size: 10.5px;
+  font-weight: 800;
+  color: var(--accent);
+  word-break: break-word;
+}
+
+.cert-whom {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: var(--ink);
+  margin-bottom: 5px;
+  flex-shrink: 0;
+}
+
+.cert-subject {
+  text-align: center;
+  padding: 7px 10px 6px;
+  margin-bottom: 8px;
+  border: 1.5px dashed #94a3b8;
+  border-radius: 6px;
+  background: #f8fafc;
+  flex-shrink: 0;
+}
+
+.cert-subject-name {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--ink);
+  border-bottom: 1.5px solid #94a3b8;
+  display: inline-block;
+  min-width: 50%;
+  padding: 0 10px 2px;
+}
+
+.cert-subject-role {
+  margin-top: 3px;
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.cert-copy {
+  flex: 1 1 auto;
+  min-height: 0;
+  font-size: 10px;
+  line-height: 1.38;
+  text-align: justify;
+  color: var(--ink);
+}
+
+.cert-copy p {
+  margin: 0 0 5px;
+}
+
+.cert-copy strong.accent {
+  color: var(--accent);
+}
+
+.cert-purpose {
+  margin-top: 3px;
+  padding: 5px 8px;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 5px;
+  font-size: 9px;
+  line-height: 1.3;
+  color: #92400e;
+}
+
+.cert-list {
+  margin: 2px 0 5px;
+  padding-left: 1rem;
+  font-size: 9px;
+  line-height: 1.3;
+}
+
+.cert-list li {
+  margin-bottom: 1px;
+}
+
+.cert-given {
+  margin-top: 5px;
+  padding: 5px 8px;
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-border);
+  border-radius: 5px;
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--accent-dark);
+  line-height: 1.3;
+}
+
+.cert-bottom {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  align-items: end;
+  margin-top: 8px;
+  flex-shrink: 0;
+}
+
+.cert-sign {
+  text-align: center;
+}
+
+.cert-sign-line {
+  width: 80%;
+  margin: 26px auto 3px;
+  border-top: 1.5px solid #64748b;
+}
+
+.cert-sign-name {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.cert-sign-role {
+  font-size: 8.5px;
+  font-weight: 700;
+  font-style: italic;
+  color: var(--muted);
+}
+
+.cert-footer {
+  margin-top: 8px;
+  padding-top: 5px;
+  border-top: 2px solid var(--rail);
+  flex-shrink: 0;
+}
+
+.cert-footer-motto {
+  text-align: center;
+  font-size: 8.5px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: var(--rail);
+  text-transform: uppercase;
+}
+
+.cert-footer-row {
+  margin-top: 3px;
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  font-size: 7.5px;
+  color: var(--muted);
+}
+
+@media print {
+  .cert-toolbar,
+  .no-print {
+    display: none !important;
+  }
+
+  .cert-preview-page,
+  .cert-stage {
+    background: #fff !important;
+    padding: 0 !important;
+  }
+
+  .cert-sheet {
+    box-shadow: none !important;
+    border: none !important;
+    width: 210mm !important;
+    height: 297mm !important;
+  }
+
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+}
+
+@media (max-width: 900px) {
+  .cert-sheet:not(.cert-sheet--export) {
+    width: 100%;
+    height: auto;
+    max-height: none;
+    aspect-ratio: 210 / 297;
+  }
+}

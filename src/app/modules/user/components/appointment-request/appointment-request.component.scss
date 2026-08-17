@@ -1,0 +1,277 @@
+/* Container for the wizard */
+.appointment-container {
+    max-width: 800px;
+    margin: 30px auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    padding: 30px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+h2 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+
+/* Step Wizard (Circles at top) */
+.wizard-steps {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 40px;
+    position: relative;
+}
+
+.wizard-steps::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: #e0e0e0;
+    z-index: 1;
+    transform: translateY(-50%);
+}
+
+.step {
+    width: 40px;
+    height: 40px;
+    background: #fff;
+    border: 2px solid #e0e0e0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #aaa;
+    position: relative;
+    z-index: 2;
+    transition: all 0.3s ease;
+}
+
+.step.active {
+    border-color: #3498db;
+    background: #3498db;
+    color: #fff;
+    transform: scale(1.1);
+}
+
+.step.completed {
+    border-color: #2ecc71;
+    background: #2ecc71;
+    color: #fff;
+}
+
+/* Form Styles */
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #555;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+input:focus, select:focus {
+    border-color: #3498db;
+    outline: none;
+}
+
+.form-row {
+    display: flex;
+    gap: 20px;
+}
+
+.form-group {
+    flex: 1;
+}
+
+/* Certificate Selection Cards */
+.certificate-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.cert-card {
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 20px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    background: #f9f9f9;
+}
+
+.cert-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    border-color: #3498db;
+}
+
+.cert-card h3 {
+    margin: 0 0 10px 0;
+    color: #2c3e50;
+}
+
+/* Buttons */
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+button {
+    padding: 10px 25px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.2s;
+}
+
+.btn-prev {
+    background: #ecf0f1;
+    color: #7f8c8d;
+}
+
+.btn-next, .btn-submit {
+    background: #3498db;
+    color: #fff;
+}
+
+.btn-next:hover {
+    background: #2980b9;
+}
+
+.btn-cancel {
+    background: transparent;
+    color: #e74c3c;
+    text-decoration: underline;
+}
+
+/* Calendar Styles */
+.calendar-input-group {
+    position: relative;
+    max-width: 300px;
+    margin-bottom: 20px;
+}
+
+.calendar-popup {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 300px;
+    background: white;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border-radius: 8px;
+    z-index: 1000;
+    padding: 15px;
+    margin-top: 5px;
+}
+
+.cal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.cal-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.cal-grid.days {
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.cal-btn {
+    padding: 8px;
+    background: #f8f9fa;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.cal-btn:hover {
+    background: #e9ecef;
+}
+
+.cal-btn.active {
+    background: #3498db;
+    color: white;
+    border-color: #3498db;
+}
+
+.cal-day-header {
+    text-align: center;
+    font-size: 12px;
+    font-weight: bold;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.cal-day.disabled {
+    color: #ccc;
+    cursor: not-allowed;
+    background: #fff;
+}
+
+/* Preview Modal */
+.preview-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.preview-box {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.preview-details p {
+    margin: 10px 0;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+}
+
+.preview-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.btn-confirm {
+    background: #27ae60;
+    color: white;
+    flex: 1;
+}
+
+.btn-edit {
+    background: #95a5a6;
+    color: white;
+    flex: 1;
+}

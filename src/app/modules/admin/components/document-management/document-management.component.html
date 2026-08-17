@@ -1,0 +1,118 @@
+<div class="p-6">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold gradient-text">Document Management</h1>
+    <p class="text-gray-600 dark:text-emerald-200/70 mt-2">Process and manage certificate appointment requests</p>
+  </div>
+
+  <!-- Filter Buttons -->
+  <div class="mb-6">
+    <div class="flex space-x-2">
+      <button 
+        (click)="filterByStatus('all')" 
+        [class]="statusFilter === 'all' ? 'btn-primary' : 'btn-outline'">
+        All Requests
+      </button>
+      <button 
+        (click)="filterByStatus('pending')" 
+        [class]="statusFilter === 'pending' ? 'btn-primary' : 'btn-outline'">
+        Pending
+      </button>
+      <button 
+        (click)="filterByStatus('approved')" 
+        [class]="statusFilter === 'approved' ? 'btn-primary' : 'btn-outline'">
+        Approved
+      </button>
+      <button 
+        (click)="filterByStatus('completed')" 
+        [class]="statusFilter === 'completed' ? 'btn-primary' : 'btn-outline'">
+        Completed
+      </button>
+      <button 
+        (click)="filterByStatus('rejected')" 
+        [class]="statusFilter === 'rejected' ? 'btn-primary' : 'btn-outline'">
+        Rejected
+      </button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-emerald-50">Certificate Appointment Requests</h2>
+      <div class="text-sm text-gray-500 dark:text-emerald-300/60">
+        Total: {{ filteredRequests.length }} requests
+      </div>
+    </div>
+
+    <p *ngIf="error" class="mb-4 text-sm text-rose-600 dark:text-rose-300">{{ error }}</p>
+    <p *ngIf="loading" class="mb-4 text-sm muted-text">Loading from Supabase…</p>
+
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200 dark:divide-emerald-900">
+        <thead class="bg-gray-50 dark:bg-surface-dark">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-emerald-300/60 uppercase tracking-wider">Resident</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-emerald-300/60 uppercase tracking-wider">Certificate</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-emerald-300/60 uppercase tracking-wider">Appointment Date & Time</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-emerald-300/60 uppercase tracking-wider">Status</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-emerald-300/60 uppercase tracking-wider">Requested</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-emerald-300/60 uppercase tracking-wider">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white dark:bg-surface-dark-elevated divide-y divide-gray-200 dark:divide-emerald-900">
+          <tr *ngFor="let request of filteredRequests">
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div>
+                <div class="text-sm font-medium text-gray-900 dark:text-emerald-50">{{ request.userName || ((request.firstName || '') + ' ' + (request.lastName || '')).trim() || 'Resident' }}</div>
+                <div class="text-sm text-gray-500 dark:text-emerald-300/60">{{ request.userEmail }}</div>
+              </div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-emerald-50">
+              {{ certificateLabel(request) }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-emerald-50">
+              {{ formatDateTime(appointmentWhen(request).date, appointmentWhen(request).time) }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <span [class]="getStatusColor(request.status)" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full">
+                {{ request.status | titlecase }}
+              </span>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-emerald-300/60">
+              {{ formatDate(request.createdAt) }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+              <button
+                *ngIf="(request.status || '').toLowerCase() === 'pending'"
+                (click)="updateAppointmentStatus(request.id, 'approved')"
+                class="text-emerald-600 hover:text-emerald-900 mr-3">
+                Approve
+              </button>
+              <button
+                *ngIf="(request.status || '').toLowerCase() === 'approved'"
+                (click)="updateAppointmentStatus(request.id, 'completed')"
+                class="text-green-600 hover:text-green-900 mr-3">
+                Complete
+              </button>
+              <button
+                *ngIf="(request.status || '').toLowerCase() === 'pending'"
+                (click)="updateAppointmentStatus(request.id, 'rejected')"
+                class="text-red-600 hover:text-red-900 mr-3">
+                Reject
+              </button>
+              <button
+                *ngIf="canShowCertificate(request)"
+                (click)="showCertificateForRequest(request)"
+                class="text-purple-600 hover:text-purple-900">
+                Show Certificate
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <div *ngIf="filteredRequests.length === 0" class="text-center py-8 text-gray-500 dark:text-emerald-300/60">
+        No appointment requests found for the selected filter.
+      </div>
+    </div>
+  </div>
+</div>

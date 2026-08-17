@@ -1,0 +1,102 @@
+<div class="min-h-screen gradient-bg flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+  <div class="sm:mx-auto sm:w-full sm:max-w-md">
+    <div class="text-center">
+      <h2 class="text-3xl font-bold gradient-text mb-2">Sign in to your account</h2>
+      <p class="text-slate-700 dark:text-emerald-100">
+        Access your barangay appointment certificate management portal
+      </p>
+      <p class="mt-2 text-sm text-slate-600 dark:text-emerald-200/70">
+        New accounts must confirm email after registration before signing in.
+      </p>
+
+      <div *ngIf="basketballCourtMessage" class="mt-4 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 px-4 py-3 rounded-md">
+        <div class="flex items-center">
+          <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+          </svg>
+          {{ basketballCourtMessage }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+    <div class="form-card">
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-6">
+
+        <div>
+          <label for="email" class="form-label">Email address</label>
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            class="input-field"
+            [class.border-red-500]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+            placeholder="Enter your email"
+            autocomplete="email"
+          />
+          <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="mt-1 text-sm text-red-600">
+            <span *ngIf="loginForm.get('email')?.errors?.['required']">Email is required</span>
+            <span *ngIf="loginForm.get('email')?.errors?.['email']">Please enter a valid email</span>
+          </div>
+        </div>
+
+        <div>
+          <label for="password" class="form-label">Password</label>
+          <input
+            id="password"
+            type="password"
+            formControlName="password"
+            class="input-field"
+            [class.border-red-500]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+            placeholder="Enter your password"
+            autocomplete="current-password"
+          />
+          <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="mt-1 text-sm text-red-600">
+            <span *ngIf="loginForm.get('password')?.errors?.['required']">Password is required</span>
+            <span *ngIf="loginForm.get('password')?.errors?.['minlength']">Password must be at least 6 characters</span>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between">
+          <div class="flex items-center">
+            <input id="remember-me" type="checkbox" class="form-checkbox" />
+            <label for="remember-me" class="form-check-label">Remember me</label>
+          </div>
+        </div>
+
+        <div *ngIf="errorMessage" class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+          {{ errorMessage }}
+        </div>
+
+        <button
+          type="submit"
+          [disabled]="isLoading"
+          class="w-full btn-primary text-white flex justify-center py-2 px-4 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <span *ngIf="!isLoading">Sign in</span>
+          <span *ngIf="isLoading" class="flex items-center">
+            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Signing in...
+          </span>
+        </button>
+
+        <div class="text-center mt-4">
+          <span class="form-muted">
+            Don't have an account?
+            <button type="button" (click)="navigateToRegister()" class="form-link">Sign up here</button>
+          </span>
+        </div>
+      </form>
+    </div>
+
+    <div class="mt-6 text-center">
+      <button type="button" (click)="navigateToHome()" class="text-sm font-medium text-slate-700 dark:text-emerald-100 hover:text-emerald-300">
+        ← Back to Home
+      </button>
+    </div>
+  </div>
+</div>

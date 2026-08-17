@@ -1,0 +1,344 @@
+<div class="min-h-screen gradient-bg flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+  <div class="sm:mx-auto sm:w-full sm:max-w-md">
+    <div class="text-center">
+      <h2 class="text-3xl font-bold gradient-text mb-2">Create your account</h2>
+      <p class="text-slate-700 dark:text-emerald-100">Join our barangay appointment certificate management system</p>
+    </div>
+  </div>
+
+  <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+    <div class="form-card">
+
+      <!-- OTP verification step -->
+      <div *ngIf="step === 'otp'" class="space-y-6">
+        <div>
+          <h3 class="text-lg font-bold text-emerald-800 dark:text-emerald-200">Enter registration OTP</h3>
+          <p class="text-sm text-slate-600 dark:text-emerald-200/70 mt-1">
+            We sent a 6-digit code to your email (valid {{ otpExpiryMinutes }} minutes). Verify the OTP to create your account.
+          </p>
+        </div>
+
+        <div *ngIf="successMessage" class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded">
+          {{ successMessage }}
+        </div>
+        <div *ngIf="errorMessage" class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+          {{ errorMessage }}
+        </div>
+
+        <form [formGroup]="otpForm" (ngSubmit)="onSubmit()" class="space-y-4">
+          <div>
+            <label class="form-label">One-time password (OTP)</label>
+            <input
+              type="text"
+              inputmode="numeric"
+              maxlength="6"
+              formControlName="otp"
+              class="input-field tracking-widest text-center text-2xl font-bold"
+              placeholder="000000"
+              autocomplete="one-time-code"
+            />
+            <div *ngIf="otpForm.get('otp')?.invalid && otpForm.get('otp')?.touched" class="mt-1 text-sm text-red-600">
+              Enter the 6-digit code from your email
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            [disabled]="isLoading"
+            class="w-full btn-primary text-white py-2 px-4 disabled:opacity-50"
+          >
+            <span *ngIf="!isLoading">Verify OTP &amp; Create Account</span>
+            <span *ngIf="isLoading">Verifying...</span>
+          </button>
+
+          <div class="flex flex-col sm:flex-row gap-2 justify-between">
+            <button type="button" class="form-link text-sm" [disabled]="isLoading" (click)="resendOtp()">
+              Resend OTP
+            </button>
+            <button type="button" class="form-link text-sm" [disabled]="isLoading" (click)="backToForm()">
+              ← Back to form
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <form *ngIf="step === 'form'" [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-6">
+        
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+          <div>
+            <label class="form-label">First Name</label>
+            <input
+              id="firstName"
+              type="text"
+              formControlName="firstName"
+              class="input-field"
+              [class.border-red-500]="registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched"
+              placeholder="Enter first name"
+            />
+            <div *ngIf="registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched" class="mt-1 text-sm text-red-600">
+              <span *ngIf="registerForm.get('firstName')?.errors?.['required']">First name is required</span>
+              <span *ngIf="registerForm.get('firstName')?.errors?.['minlength']">First name must be at least 2 characters</span>
+            </div>
+          </div>
+
+          <div>
+            <label class="form-label">Last Name</label>
+            <input
+              id="lastName"
+              type="text"
+              formControlName="lastName"
+              class="input-field"
+              [class.border-red-500]="registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched"
+              placeholder="Enter last name"
+            />
+            <div *ngIf="registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched" class="mt-1 text-sm text-red-600">
+              <span *ngIf="registerForm.get('lastName')?.errors?.['required']">Last name is required</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+          <div>
+            <label class="form-label">Middle Name (Optional)</label>
+            <input
+              type="text"
+              formControlName="middleName"
+              class="input-field"
+              placeholder="Enter middle name"
+            />
+          </div>
+
+          <div>
+            <label class="form-label">Suffix (Optional)</label>
+            <input
+              type="text"
+              formControlName="suffix"
+              class="input-field"
+              placeholder="e.g. Jr., III"
+            />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+          <div>
+            <label class="form-label">Birth Date</label>
+            <input
+              type="date"
+              formControlName="birthDate"
+              class="input-field"
+              [class.border-red-500]="registerForm.get('birthDate')?.invalid && registerForm.get('birthDate')?.touched"
+            />
+            <div *ngIf="registerForm.get('birthDate')?.invalid && registerForm.get('birthDate')?.touched" class="mt-1 text-sm text-red-600">
+              Birth date is required
+            </div>
+          </div>
+
+          <div>
+            <label class="form-label">Gender</label>
+            <select
+              formControlName="gender"
+              class="input-field"
+              [class.border-red-500]="registerForm.get('gender')?.invalid && registerForm.get('gender')?.touched">
+              <option value="" disabled>Select gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+            <div *ngIf="registerForm.get('gender')?.invalid && registerForm.get('gender')?.touched" class="mt-1 text-sm text-red-600">
+              Gender is required
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+          <div>
+            <label class="form-label">Civil Status</label>
+            <select
+              formControlName="civilStatus"
+              class="input-field"
+              [class.border-red-500]="registerForm.get('civilStatus')?.invalid && registerForm.get('civilStatus')?.touched">
+              <option value="" disabled>Select status</option>
+              <option value="Single">Single</option>
+              <option value="Married">Married</option>
+              <option value="Widowed">Widowed</option>
+              <option value="Separated">Separated</option>
+            </select>
+            <div *ngIf="registerForm.get('civilStatus')?.invalid && registerForm.get('civilStatus')?.touched" class="mt-1 text-sm text-red-600">
+              Civil status is required
+            </div>
+          </div>
+
+          <div>
+            <label class="form-label">Nationality</label>
+            <input
+              type="text"
+              formControlName="nationality"
+              class="input-field"
+              placeholder="Nationality"
+              [class.border-red-500]="registerForm.get('nationality')?.invalid && registerForm.get('nationality')?.touched"
+            />
+            <div *ngIf="registerForm.get('nationality')?.invalid && registerForm.get('nationality')?.touched" class="mt-1 text-sm text-red-600">
+              Nationality is required
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label class="form-label">Email address</label>
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            class="input-field"
+            [class.border-red-500]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"
+            placeholder="Enter your email"
+          />
+          <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched" class="mt-1 text-sm text-red-600">
+            <span *ngIf="registerForm.get('email')?.errors?.['required']">Email is required</span>
+            <span *ngIf="registerForm.get('email')?.errors?.['email']">Please enter a valid email</span>
+          </div>
+        </div>
+
+        <div>
+          <label class="form-label">Phone Number</label>
+          <input
+            id="phone"
+            type="tel"
+            formControlName="phone"
+            class="input-field"
+            [class.border-red-500]="registerForm.get('phone')?.invalid && registerForm.get('phone')?.touched"
+            placeholder="Enter your phone number"
+          />
+          <div *ngIf="registerForm.get('phone')?.invalid && registerForm.get('phone')?.touched" class="mt-1 text-sm text-red-600">
+            <span *ngIf="registerForm.get('phone')?.errors?.['required']">Phone number is required</span>
+            <span *ngIf="registerForm.get('phone')?.errors?.['pattern']">Please enter a valid phone number</span>
+          </div>
+        </div>
+
+        <div>
+          <label class="form-label">Address</label>
+          <textarea
+            id="address"
+            formControlName="address"
+            rows="3"
+            class="input-field resize-none"
+            [class.border-red-500]="registerForm.get('address')?.invalid && registerForm.get('address')?.touched"
+            placeholder="Enter your complete address"
+          ></textarea>
+          <div *ngIf="registerForm.get('address')?.invalid && registerForm.get('address')?.touched" class="mt-1 text-sm text-red-600">
+            <span *ngIf="registerForm.get('address')?.errors?.['required']">Address is required</span>
+            <span *ngIf="registerForm.get('address')?.errors?.['minlength']">Address must be at least 10 characters</span>
+          </div>
+        </div>
+
+        <div class="bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded mb-4">
+          <p class="text-sm">
+            <strong>Note:</strong> After you register, we email a one-time code (EmailJS). Enter it to create your account, then sign in.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+          <div>
+            <label class="form-label">Password</label>
+            <input
+              id="password"
+              type="password"
+              formControlName="password"
+              class="input-field"
+              [class.border-red-500]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
+              placeholder="Create password"
+            />
+            <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched" class="mt-1 text-sm text-red-600">
+              <span *ngIf="registerForm.get('password')?.errors?.['required']">Password is required</span>
+              <span *ngIf="registerForm.get('password')?.errors?.['minlength']">Password must be at least 6 characters</span>
+            </div>
+          </div>
+
+          <div>
+            <label class="form-label">Confirm Password</label>
+            <input
+              id="confirmPassword"
+              type="password"
+              formControlName="confirmPassword"
+              class="input-field"
+              [class.border-red-500]="registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched"
+              placeholder="Confirm password"
+            />
+            <div *ngIf="registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched" class="mt-1 text-sm text-red-600">
+              <span *ngIf="registerForm.get('confirmPassword')?.errors?.['required']">Please confirm your password</span>
+              <span *ngIf="registerForm.get('confirmPassword')?.hasError('passwordMismatch')">Passwords do not match</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="rounded-xl border border-emerald-200 dark:border-emerald-800 bg-emerald-50/80 dark:bg-emerald-950/30 p-4">
+          <p class="text-sm font-bold text-emerald-900 dark:text-emerald-100">Email verification</p>
+          <p class="text-xs text-emerald-800/80 dark:text-emerald-200/70 mt-1">
+            Verification is <strong>Email OTP via EmailJS</strong> only. Click Register Account to receive your 6-digit code.
+          </p>
+        </div>
+
+        <div class="flex flex-col">
+          <div class="flex items-center">
+            <input
+              id="agreeToTerms"
+              type="checkbox"
+              formControlName="agreeToTerms"
+              class="form-checkbox"
+            />
+            <label for="agreeToTerms" class="form-check-label">
+              I agree to the 
+              <a href="#" class="form-link">Terms and Conditions</a>
+              and 
+              <a href="#" class="form-link">Privacy Policy</a>
+            </label>
+          </div>
+          <div *ngIf="registerForm.get('agreeToTerms')?.invalid && registerForm.get('agreeToTerms')?.touched" class="mt-1 text-sm text-red-600">
+            You must agree to the terms and conditions
+          </div>
+        </div>
+
+        <div *ngIf="successMessage" class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded mb-4">
+          {{ successMessage }}
+        </div>
+
+        <div *ngIf="errorMessage" class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">
+          {{ errorMessage }}
+        </div>
+
+        <div>
+          <button
+            type="submit"
+            [disabled]="isLoading"
+            class="w-full btn-primary text-white flex justify-center py-2 px-4 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <span *ngIf="!isLoading">Register Account</span>
+            <span *ngIf="isLoading" class="flex items-center">
+              <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Please wait...
+            </span>
+          </button>
+        </div>
+
+        <div class="text-center">
+          <span class="form-muted">
+            Already have an account?
+            <button type="button" (click)="navigateToLogin()" class="form-link">
+              Sign in here
+            </button>
+          </span>
+        </div>
+        
+      </form> 
+      </div>
+
+    <div class="mt-6 text-center">
+      <button type="button" (click)="navigateToHome()" class="text-sm font-medium text-slate-700 dark:text-emerald-100 hover:text-emerald-300">
+        ← Back to Home
+      </button>
+    </div>
+  </div>
+</div>

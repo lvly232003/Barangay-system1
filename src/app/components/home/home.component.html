@@ -1,0 +1,158 @@
+<!-- Hero Section -->
+<section class="hero-emerald">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20">
+    <div class="text-center">
+      <h1 class="text-4xl md:text-6xl font-bold mb-6">
+        Welcome to Barangay Appointment Certificate Management System
+      </h1>
+      <p class="text-xl md:text-2xl mb-8 text-emerald-100">
+        Streamlining barangay certificate appointments and citizen services for a better community
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <button
+          type="button"
+          class="btn-hero-solid"
+          (click)="navigateToLogin()">
+          Access Portal
+        </button>
+        <button
+          type="button"
+          class="btn-hero-outline"
+          (click)="navigateToRegister()">
+          Create Account
+        </button>
+        <button
+          type="button"
+          class="btn-hero-accent"
+          (click)="navigateToBasketballCourt()">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+          </svg>
+          Basketball Court Reservation
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- About Section -->
+<section id="about" class="landing-section py-16 md:py-20 bg-white dark:bg-surface-dark">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12 md:mb-16">
+      <h2 class="text-3xl md:text-4xl font-bold gradient-text mb-4">
+        Comprehensive Certificate Appointment Management
+      </h2>
+      <p class="text-xl muted-text max-w-3xl mx-auto">
+        Our system provides all the tools needed for efficient barangay certificate appointments,
+        citizen services, and document processing for Barangay Old Cabalan, Olongapo City.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="card text-center">
+        <div class="w-16 h-16 bg-emerald-100 dark:bg-emerald-900 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg class="w-8 h-8 text-emerald-600 dark:text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold mb-4 text-emerald-700 dark:text-emerald-300">User Management</h3>
+        <p class="muted-text">
+          Comprehensive user registration, profile management, and role-based access control
+          for secure and efficient system administration.
+        </p>
+      </div>
+
+      <div class="card text-center">
+        <div class="w-16 h-16 bg-emerald-100 dark:bg-emerald-900 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg class="w-8 h-8 text-emerald-600 dark:text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold mb-4 text-emerald-700 dark:text-emerald-300">Certificate Management</h3>
+        <p class="muted-text">
+          Streamlined certificate processing, appointment scheduling, and request tracking
+          for efficient citizen services.
+        </p>
+      </div>
+
+      <div class="card text-center">
+        <div class="w-16 h-16 bg-emerald-100 dark:bg-emerald-900 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg class="w-8 h-8 text-emerald-600 dark:text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold mb-4 text-emerald-700 dark:text-emerald-300">Appointment Scheduling</h3>
+        <p class="muted-text">
+          Easy appointment booking, time slot management, and scheduling tools
+          for convenient citizen services.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Services Section -->
+<section id="services" class="landing-section py-16 md:py-20 gradient-bg">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12 md:mb-16">
+      <h2 class="text-3xl md:text-4xl font-bold gradient-text mb-4">
+        Available Certificate Services
+      </h2>
+      <p class="text-xl muted-text">
+        Access a wide range of barangay certificate services online
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="card" *ngFor="let service of services">
+        <div class="flex items-start justify-between gap-3 mb-2">
+          <h4 class="font-semibold text-slate-900 dark:text-emerald-50">{{ service.title }}</h4>
+          <span *ngIf="service.fee" class="text-sm font-semibold text-emerald-700 dark:text-emerald-300 whitespace-nowrap">{{ service.fee }}</span>
+        </div>
+        <p class="text-sm muted-text">{{ service.desc }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact" class="landing-section py-16 md:py-20 bg-white dark:bg-surface-dark">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-bold gradient-text mb-4">Contact Us</h2>
+      <p class="text-xl muted-text max-w-2xl mx-auto">
+        Reach the Barangay Hall of Old Cabalan for certificate appointments and citizen services.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-12">
+      <div class="card text-center">
+        <h3 class="font-semibold text-emerald-700 dark:text-emerald-300 mb-2">Address</h3>
+        <p class="muted-text text-sm">Narra Lane Purok 11, Old Cabalan<br>Olongapo City</p>
+      </div>
+      <div class="card text-center">
+        <h3 class="font-semibold text-emerald-700 dark:text-emerald-300 mb-2">Phone</h3>
+        <p class="muted-text text-sm">(047) 223 - 1629</p>
+      </div>
+      <div class="card text-center">
+        <h3 class="font-semibold text-emerald-700 dark:text-emerald-300 mb-2">Email</h3>
+        <p class="muted-text text-sm">brg.oldcabalan.1988&#64;gmail.com</p>
+      </div>
+    </div>
+
+    <div class="rounded-xl bg-emerald-700 dark:bg-emerald-950 px-6 py-10 text-center">
+      <h3 class="text-2xl md:text-3xl font-bold text-white mb-3">Ready to Get Started?</h3>
+      <p class="text-emerald-100 mb-6 max-w-2xl mx-auto">
+        Join our digital barangay community and experience streamlined services.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <button type="button" class="btn-hero-solid" (click)="navigateToRegister()">
+          Create Account Now
+        </button>
+        <button type="button" class="btn-hero-outline" (click)="navigateToLogin()">
+          Already Have Account?
+        </button>
+      </div>
+    </div>
+  </div>
+</section>

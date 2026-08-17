@@ -1,0 +1,23 @@
+<div class="h-screen page-shell flex flex-col overflow-hidden">
+  <app-admin-navbar [menuOpen]="sidebarOpen" (menuToggle)="toggleSidebar()"></app-admin-navbar>
+
+  <div class="flex flex-1 overflow-hidden relative min-h-0">
+    <div
+      *ngIf="sidebarOpen && !isDesktop"
+      class="portal-drawer-overlay"
+      (click)="closeSidebar()"
+      aria-hidden="true"></div>
+
+    <aside
+      class="portal-sidebar"
+      [class.portal-sidebar-open]="sidebarOpen"
+      [class.portal-sidebar-closed]="!sidebarOpen"
+      [attr.aria-hidden]="!sidebarOpen">
+      <app-admin-sidebar></app-admin-sidebar>
+    </aside>
+
+    <div class="flex-1 overflow-auto min-w-0">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

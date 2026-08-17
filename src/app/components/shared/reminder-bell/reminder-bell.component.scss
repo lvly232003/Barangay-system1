@@ -1,0 +1,48 @@
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Desktop / tablet: anchored under the bell in the header */
+.reminder-bell__panel--desktop {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  width: min(22rem, calc(100vw - 1.5rem));
+}
+
+.reminder-bell__panel--desktop .reminder-bell__list {
+  max-height: min(20rem, 55vh);
+}
+
+/* Phones: fixed under header so parent overflow:hidden cannot clip it */
+.reminder-bell__panel--mobile {
+  position: fixed;
+  top: 4.25rem; /* below h-16 navbar */
+  left: 0.75rem;
+  right: 0.75rem;
+  width: auto;
+  max-height: calc(100dvh - 5.5rem);
+  display: flex;
+  flex-direction: column;
+}
+
+.reminder-bell__panel--mobile .reminder-bell__list {
+  flex: 1 1 auto;
+  max-height: none;
+  min-height: 0;
+}
+
+@media (min-width: 640px) {
+  .reminder-bell__panel--mobile {
+    /* safety: if mq lags, still behave as dropdown */
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    left: auto;
+    right: 0;
+    width: min(22rem, calc(100vw - 1.5rem));
+    max-height: none;
+  }
+}

@@ -1,0 +1,102 @@
+<nav class="navbar relative z-[60]">
+  <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between gap-2 sm:gap-3 h-16">
+      <div class="flex items-center min-w-0 flex-1">
+        <button
+          type="button"
+          class="text-left min-w-0"
+          (click)="navigateToHome()"
+          title="Barangay Appointment Certificate Management System">
+          <h1 class="text-sm sm:text-base lg:text-xl font-bold gradient-text truncate">
+            <span class="lg:hidden">Barangay System</span>
+            <span class="hidden lg:inline">Barangay Appointment Certificate Management System</span>
+          </h1>
+        </button>
+
+        <div class="hidden lg:block ml-8">
+          <div class="flex items-baseline space-x-4">
+            <a
+              routerLink="/about"
+              routerLinkActive="nav-link-active"
+              class="nav-link px-3 py-2 rounded-md text-sm font-medium"
+              (click)="goToSection($event, 'about')">About</a>
+            <a
+              routerLink="/services"
+              routerLinkActive="nav-link-active"
+              class="nav-link px-3 py-2 rounded-md text-sm font-medium"
+              (click)="goToSection($event, 'services')">Services</a>
+            <a
+              routerLink="/contact"
+              routerLinkActive="nav-link-active"
+              class="nav-link px-3 py-2 rounded-md text-sm font-medium"
+              (click)="goToSection($event, 'contact')">Contact</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+        <app-theme-toggle></app-theme-toggle>
+
+        <div *ngIf="!currentUser" class="hidden lg:flex items-center gap-3">
+          <button type="button" class="btn-outline text-sm" (click)="navigateToLogin()">Login</button>
+          <button type="button" class="btn-primary text-sm" (click)="navigateToRegister()">Register</button>
+        </div>
+
+        <div *ngIf="currentUser" class="hidden lg:flex items-center gap-3">
+          <span class="text-sm muted-text max-w-[10rem] truncate">
+            Welcome, {{ currentUser.firstName }} {{ currentUser.lastName }}
+          </span>
+          <button type="button" class="btn-outline text-sm" (click)="navigateToDashboard()">Dashboard</button>
+          <button type="button" class="nav-link text-sm" (click)="logout()">Logout</button>
+        </div>
+
+        <button
+          type="button"
+          class="hamburger-btn lg:hidden"
+          (click)="toggleMenu()"
+          [attr.aria-expanded]="menuOpen"
+          aria-controls="public-mobile-menu"
+          aria-label="Toggle navigation menu">
+          <svg *ngIf="!menuOpen" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+          <svg *ngIf="menuOpen" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div
+      *ngIf="menuOpen"
+      id="public-mobile-menu"
+      class="lg:hidden border-t border-emerald-100 dark:border-emerald-900 pb-4 pt-2 space-y-1">
+      <a
+        routerLink="/about"
+        class="block nav-link px-3 py-2.5 rounded-md text-sm font-medium"
+        (click)="goToSection($event, 'about')">About</a>
+      <a
+        routerLink="/services"
+        class="block nav-link px-3 py-2.5 rounded-md text-sm font-medium"
+        (click)="goToSection($event, 'services')">Services</a>
+      <a
+        routerLink="/contact"
+        class="block nav-link px-3 py-2.5 rounded-md text-sm font-medium"
+        (click)="goToSection($event, 'contact')">Contact</a>
+
+      <div class="pt-2 mt-2 border-t border-emerald-100 dark:border-emerald-900 space-y-2 px-1">
+        <ng-container *ngIf="!currentUser">
+          <button type="button" class="w-full btn-outline text-sm" (click)="navigateToLogin()">Login</button>
+          <button type="button" class="w-full btn-primary text-sm" (click)="navigateToRegister()">Register</button>
+        </ng-container>
+        <ng-container *ngIf="currentUser">
+          <p class="px-2 text-sm muted-text">
+            Welcome, {{ currentUser.firstName }} {{ currentUser.lastName }}
+          </p>
+          <button type="button" class="w-full btn-outline text-sm" (click)="navigateToDashboard()">Dashboard</button>
+          <button type="button" class="w-full btn-outline text-sm" (click)="logout()">Logout</button>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</nav>

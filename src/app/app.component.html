@@ -1,0 +1,7 @@
+<div class="min-h-screen page-shell transition-colors duration-300">
+  <app-navbar *ngIf="showChrome"></app-navbar>
+  <main>
+    <router-outlet></router-outlet>
+  </main>
+  <app-footer *ngIf="showChrome"></app-footer>
+</div>
